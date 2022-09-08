@@ -67,4 +67,4 @@ if __name__ == '__main__':
 		with open('out.wav', 'rb') as recording:
 			for chunk in recording:
 				client_socket.send(chunk)
-		print(client_socket.recv(1000))
+		os.system('aplay out.wav')
