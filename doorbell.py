@@ -15,30 +15,22 @@ def server():
 	while True:
 		try:
 			conn, _ = server_socket.accept()
+			print('accepted connection from user')
 			while True:
-				try:
-					message = conn.recv(1000000)
-					if message == b'unlock':
-						servo.start(0)
-						time.sleep(1)
-						print('Motor is ready to go')
+				message = conn.recv(6)
+				print(message)
+				if message == b'unlock':
+					servo.ChangeDutyCycle(LOCKED)
+					time.sleep(1)
 
-						servo.ChangeDutyCycle(LOCKED)
-						time.sleep(1)
+					servo.ChangeDutyCycle(UNLOCKED)
+					time.sleep(1)
 
-						servo.ChangeDutyCycle(UNLOCKED)
-						time.sleep(1)
+					servo.ChangeDutyCycle(LOCKED)
+					time.sleep(1)
 
-						servo.ChangeDutyCycle(LOCKED)
-						time.sleep(1)
-
-						servo.stop()
-						print('Motor stopped')
-						conn.send(b'unlocked')
-				except:
-					print('client disconnected')
-					break
-		finally:
+					conn.send(b'unlocked')
+		except:
 			conn.close()
 
 if __name__ == '__main__':
@@ -47,11 +39,15 @@ if __name__ == '__main__':
 	servo = GPIO.PWM(PIN_MOTOR, 50)
 	btn = Button(4)
 
+	servo.start(0)
+	time.sleep(1)
+	print('Motor is ready to go')
+
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	try:
 		client_socket.connect(('172.20.10.2', 9000))
-		print('connected to server')
+		print('connected to user')
 
 		server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		server_socket.bind(('', 8000))
@@ -59,7 +55,10 @@ if __name__ == '__main__':
 		server_thread = threading.Thread(name="server", target=server)
 		server_thread.start()
 	except:
+		client_socket.close()
+		server_socket.close()
 		print('something went wrong')
+		exit()
 
 	while True:
 		btn.wait_for_press()
