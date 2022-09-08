@@ -11,7 +11,7 @@ def server():
 					try:
 						data = conn.recv(1000000)
 					except:
-						print('client disconnected')
+						print('doorbell disconnected')
 						break
 					if not data:
 						break
@@ -20,7 +20,7 @@ def server():
 					try:
 						conn.send(b'received')
 					except:
-						print('client disconnected')
+						print('doorbell disconnected')
 						break
 		except:
 			conn.close()
@@ -33,12 +33,15 @@ if __name__ == '__main__':
 		server_thread = threading.Thread(name="server", target=server)
 		server_thread.start()
 	except:
+		print('cannot start the server')
 		server_socket.close()
+		exit()
 	while True:
 		if (input() == 'unlock'):
 			client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			try:
 				client_socket.connect(('172.20.10.14', 8000))
 				client_socket.send(b'unlock')
+				print(client_socket.recv(6))
 			except:
 				print('something went wrong')
