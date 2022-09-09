@@ -1,9 +1,10 @@
 from gpiozero import Button
 import RPi.GPIO as GPIO
 import socket
+import datetime
+import os
 import time
 import threading
-import os
 
 LOCKED = 2
 UNLOCKED = 12
@@ -11,27 +12,28 @@ UNLOCKED = 12
 PIN_MOTOR = 11
 
 def server():
-	print('server is running')
+	print('Server is running')
 	while True:
-		try:
-			conn, _ = server_socket.accept()
-			print('accepted connection from user')
-			while True:
+		conn, _ = server_socket.accept()
+		print('Accepted connection from the user')
+		while True:
+			try:
 				message = conn.recv(6)
 				print(message)
 				if message == b'unlock':
-					servo.ChangeDutyCycle(LOCKED)
 					time.sleep(1)
-
 					servo.ChangeDutyCycle(UNLOCKED)
-					time.sleep(1)
 
+					# unlock for 2 seconds
+					time.sleep(2)
 					servo.ChangeDutyCycle(LOCKED)
-					time.sleep(1)
 
-					conn.send(b'unlocked')
-		except:
-			conn.close()
+					time.sleep(1)
+					conn.send(b'locked')
+			except:
+				conn.close()
+				print('Lost connection with the user')
+				break
 
 if __name__ == '__main__':
 	GPIO.setmode(GPIO.BOARD)
@@ -44,12 +46,11 @@ if __name__ == '__main__':
 	print('Motor is ready to go')
 
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		client_socket.connect(('172.20.10.2', 9000))
-		print('connected to user')
+		print('Connected to user')
 
-		server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		server_socket.bind(('', 8000))
 		server_socket.listen(1)
 		server_thread = threading.Thread(name="server", target=server)
@@ -57,11 +58,12 @@ if __name__ == '__main__':
 	except:
 		client_socket.close()
 		server_socket.close()
-		print('something went wrong')
-		exit()
+		print('Something went wrong')
+		exit(1)
 
 	while True:
 		btn.wait_for_press()
+		client_socket.send(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S').encode())
 
 		os.system('arecord --format=S16_LE --rate=16000 --file-type=wav --duration=1 out.wav')
 		with open('out.wav', 'rb') as recording:

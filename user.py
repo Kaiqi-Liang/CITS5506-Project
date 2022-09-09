@@ -1,36 +1,41 @@
 import socket
+import datetime
 import threading
 
+datetimes: list[datetime.datetime] = []
+
 def server():
-	print('server is running')
+	print('Server is running')
 	while True:
-		try:
-			conn, _ = server_socket.accept()
-			with open('out.wav', 'wb') as recording:
-				while True:
-					try:
-						data = conn.recv(1000000)
-					except:
-						print('doorbell disconnected')
-						break
-					if not data:
-						break
-					print(len(data))
-					recording.write(data)
-		except:
-			conn.close()
+		conn, _ = server_socket.accept()
+		date = conn.recv(1000000)
+		datetimes.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
+		with open('out.wav', 'wb') as recording:
+			while True:
+				try:
+					data = conn.recv(1000000)
+				except:
+					conn.close()
+					print('The doorbell disconnected')
+					break
+				if not data:
+					conn.close()
+					print('No more data')
+					break
+				print(len(data))
+				recording.write(data)
  
 if __name__ == '__main__':
+	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		server_socket.bind(('', 9000))
 		server_socket.listen(1)
 		server_thread = threading.Thread(name="server", target=server)
 		server_thread.start()
 	except:
-		print('cannot start the server')
+		print('Failed to start the server')
 		server_socket.close()
-		exit()
+		exit(1)
 	while True:
 		if (input() == 'unlock'):
 			client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -39,4 +44,5 @@ if __name__ == '__main__':
 				client_socket.send(b'unlock')
 				print(client_socket.recv(6))
 			except:
-				print('something went wrong')
+				print('Failed to talk to the doorbell')
+				client_socket.close()
