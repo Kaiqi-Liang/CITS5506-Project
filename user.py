@@ -17,11 +17,6 @@ def server():
 						break
 					print(len(data))
 					recording.write(data)
-					try:
-						conn.send(b'received')
-					except:
-						print('doorbell disconnected')
-						break
 		except:
 			conn.close()
  
