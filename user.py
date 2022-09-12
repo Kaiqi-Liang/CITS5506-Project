@@ -36,13 +36,13 @@ if __name__ == '__main__':
 		print('Failed to start the server')
 		server_socket.close()
 		exit(1)
-	while True:
-		if (input() == 'unlock'):
-			client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			try:
-				client_socket.connect(('172.20.10.14', 8000))
-				client_socket.send(b'unlock')
-				print(client_socket.recv(6))
-			except:
-				print('Failed to talk to the doorbell')
-				client_socket.close()
+	#while True:
+	#	if (input() == 'unlock'):
+	#		client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	#		try:
+	#			client_socket.connect(('172.20.10.14', 8000))
+	#			client_socket.send(b'unlock')
+	#			print(client_socket.recv(6))
+	#		except:
+	#			print('Failed to talk to the doorbell')
+	#			client_socket.close()
