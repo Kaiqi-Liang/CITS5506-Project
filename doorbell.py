@@ -31,6 +31,8 @@ def server():
 
 					time.sleep(1)
 					conn.send(b'locked')
+				else:
+					break
 			except:
 				conn.close()
 				print('Lost connection with the user')
@@ -52,7 +54,6 @@ if __name__ == '__main__':
 	try:
 		client_socket.connect(('100.90.40.209', 9000))
 		print('Connected to user')
-
 		server_socket.bind(('', 8000))
 		server_socket.listen(1)
 		server_thread = threading.Thread(name="server", target=server)
@@ -67,13 +68,26 @@ if __name__ == '__main__':
 		btn.wait_for_press()
 		client_socket.send(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S').encode())
 
-		# video
+		response = client_socket.recv(15)
+		print(response)
+
+		# image
 		conn = client_socket.makefile('wb')
 		camera.capture(conn, 'jpeg')
+		client_socket.send(b'finished sending image')
 
-		# audio
-		os.system('arecord --format=S16_LE --rate=16000 --file-type=wav --duration=1 out.wav')
+		response = client_socket.recv(15)
+		print(response)
+
+		# send audio
+		os.system('arecord --format=S16_LE --rate=16000 --file-type=wav --duration=3 out.wav')
 		with open('out.wav', 'rb') as recording:
 			for chunk in recording:
 				client_socket.send(chunk)
-		os.system('aplay out.wav')
+		client_socket.send(b'finished sending audio')
+		response = client_socket.recv(15)
+		print(response)
+
+		# play audio
+		# os.system('aplay out.wav')
+
