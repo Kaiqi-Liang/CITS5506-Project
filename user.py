@@ -21,7 +21,6 @@ def unlock():
 		client_socket.close()
 	return {}
 
-
 datetimes: list[datetime.datetime] = []
 
 def server():
@@ -33,43 +32,34 @@ def server():
 			datetimes.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
 		except:
 			print('The doorbell did not send a valid date')
+		conn.send(b'received date')
 
 		# receive images
-		with open('out.jpeg', 'wb') as image:
+		with open('static/out.jpeg', 'wb') as image:
 			while True:
-				try:
-					data = conn.recv(1000000)
-				except:
-					conn.close()
-					print('The doorbell disconnected')
+				data = conn.recv(10000)
+				FINISHED_SENDING_IMAGE = b'finished sending image'
+				if data.endswith(FINISHED_SENDING_IMAGE):
+					data = data[:-len(FINISHED_SENDING_IMAGE)]
 					break
-				if not data:
-					conn.close()
-					print('No more data')
-					break
-				print(len(data))
 				image.write(data)
+		conn.send(b'received image')
 
 		# receive audio
-		with open('out.wav', 'wb') as recording:
+		with open('static/out.wav', 'wb') as recording:
 			while True:
-				try:
-					data = conn.recv(1000000)
-				except:
-					conn.close()
-					print('The doorbell disconnected')
+				data = conn.recv(10000)
+				FINISHED_SENDING_AUDIO = b'finished sending audio'
+				if data.endswith(FINISHED_SENDING_AUDIO):
+					data = data[:-len(FINISHED_SENDING_AUDIO)]
 					break
-				if not data:
-					conn.close()
-					print('No more data')
-					break
-				print(len(data))
 				recording.write(data)
+		conn.send(b'received audio')
  
 if __name__ == '__main__':
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		server_socket.bind(('', 9005))
+		server_socket.bind(('', 9000))
 		server_socket.listen(1)
 		threading.Thread(target=server).start()
 	except:
