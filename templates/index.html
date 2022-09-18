@@ -10,9 +10,80 @@
 <body>
 	<h1>Smart Doorbell</h1>
 	<button id="unlock">Unlock</button>
+	<h1>Incoming</h1>
 	<audio controls>
 		<source src="{{url_for('static', filename='out.wav')}}" type="audio/wav">
 		Your browser does not support the audio tag.
 	</audio>
+	<h1>Outgoing</h1>
+	<button id="record">Record</button>
+	<button id="stop">Stop</button>
+    <div id="sound-clips"></div>
+	<script>
+		const record = document.getElementById('record');
+        const stop = document.getElementById('stop');
+        const soundClips = document.getElementById('sound-clips');
+
+
+		const handleSuccess = function (stream) {
+			const mediaRecorder = new MediaRecorder(stream);
+            let chunks = [];
+
+            // Record buton
+            record.onclick = () => {
+                mediaRecorder.start();
+                console.log(mediaRecorder.state);
+            };
+
+            // Stop button
+            stop.onclick = () => {
+                mediaRecorder.stop();
+                console.log(mediaRecorder.state);
+			};
+
+            // Add data
+            mediaRecorder.ondataavailable = (e) => {
+                chunks.push(e.data);
+			};
+
+            // Data to sound file
+            mediaRecorder.onstop = (e) => {
+                const audio = document.createElement("audio");
+                const deleteButton = document.createElement("button");
+                const sendButton = document.createElement("button");
+
+                audio.setAttribute("controls", "");
+                deleteButton.innerHTML = "Delete";
+                sendButton.innerHTML = "Send";
+
+                soundClips.appendChild(audio);
+                soundClips.appendChild(deleteButton);
+                soundClips.appendChild(sendButton);
+
+                const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+                chunks = [];
+                const audioURL = window.URL.createObjectURL(blob);
+                audio.src = audioURL;
+
+                // Delete button
+                deleteButton.onclick = (event) => {
+                    let target = event.target;
+                    target.parentNode.parentNode.removeChild(target.parentNode);
+                };
+
+                // Send button
+                sendButton.onclick = (event) => {
+
+                };
+
+            };
+		};
+
+		navigator.mediaDevices
+			.getUserMedia({ audio: true, video: false })
+			.then(handleSuccess);
+
+	</script>
 </body>
 </html>
+
