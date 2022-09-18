@@ -1,1 +1,1 @@
-document.getElementById('unlock').onclick = () => fetch('localhost:5000/unlock');
+document.getElementById('unlock').onclick = () => fetch('http://localhost:5000/unlock');

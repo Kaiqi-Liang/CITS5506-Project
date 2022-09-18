@@ -19,6 +19,7 @@ def unlock():
 	except:
 		print('Failed to talk to the doorbell')
 		client_socket.close()
+	return {}
 
 
 datetimes: list[datetime.datetime] = []
@@ -70,11 +71,9 @@ if __name__ == '__main__':
 	try:
 		server_socket.bind(('', 9005))
 		server_socket.listen(1)
-		server_thread = threading.Thread(name="server", target=server)
-		server_thread.start()
+		threading.Thread(target=server).start()
 	except:
 		print('Failed to start the server')
 		server_socket.close()
 		exit(1)
-	backend_thread = threading.Thread(name="backend", target=lambda: APP.run(debug=True, port=5000, use_reloader=False))
-	backend_thread.start()
+	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
