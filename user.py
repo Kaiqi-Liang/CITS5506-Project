@@ -27,34 +27,40 @@ def server():
 	print('Server is running')
 	while True:
 		conn, _ = server_socket.accept()
-		date = conn.recv(100)
-		try:
-			datetimes.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
-		except:
-			print('The doorbell did not send a valid date')
-		conn.send(b'received date')
+		while True:
+			try:
+				date = conn.recv(100)
+				try:
+					datetimes.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
+				except:
+					print('The doorbell did not send a valid date')
+				conn.send(b'received date')
 
-		# receive images
-		with open('static/out.jpeg', 'wb') as image:
-			while True:
-				data = conn.recv(10000)
-				FINISHED_SENDING_IMAGE = b'finished sending image'
-				if data.endswith(FINISHED_SENDING_IMAGE):
-					data = data[:-len(FINISHED_SENDING_IMAGE)]
-					break
-				image.write(data)
-		conn.send(b'received image')
+				# receive image
+				with open('static/out.jpeg', 'wb') as image:
+					while True:
+						data = conn.recv(10000)
+						FINISHED_SENDING_IMAGE = b'finished sending image'
+						if data.endswith(FINISHED_SENDING_IMAGE):
+							data = data[:-len(FINISHED_SENDING_IMAGE)]
+							break
+						image.write(data)
+				conn.send(b'received image')
 
-		# receive audio
-		with open('static/out.wav', 'wb') as recording:
-			while True:
-				data = conn.recv(10000)
-				FINISHED_SENDING_AUDIO = b'finished sending audio'
-				if data.endswith(FINISHED_SENDING_AUDIO):
-					data = data[:-len(FINISHED_SENDING_AUDIO)]
-					break
-				recording.write(data)
-		conn.send(b'received audio')
+				# receive audio
+				with open('static/out.wav', 'wb') as recording:
+					while True:
+						data = conn.recv(10000)
+						FINISHED_SENDING_AUDIO = b'finished sending audio'
+						if data.endswith(FINISHED_SENDING_AUDIO):
+							data = data[:-len(FINISHED_SENDING_AUDIO)]
+							break
+						recording.write(data)
+				conn.send(b'received audio')
+			except:
+				conn.close()
+				print('Lost connection with the doorbell')
+				break
  
 if __name__ == '__main__':
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
