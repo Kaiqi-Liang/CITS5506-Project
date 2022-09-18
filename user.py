@@ -22,8 +22,8 @@ def unlock():
 		client_socket.close()
 	return {}
 
-@APP.route('/sendaudio', methods=['POST'])
-def send_audio():
+@APP.route('/audio', methods=['POST'])
+def audio():
 	files = flask.request.files
 	audio = files.get('audio')
 	audio.save('static/out.wav')

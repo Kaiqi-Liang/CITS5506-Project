@@ -55,7 +55,7 @@ const handleSuccess = (stream) => {
 			const data = new FormData();
 			data.append('audio', blob);
 			console.log(blob);
-			fetch('http://127.0.0.1:5000/sendaudio', {
+			fetch('http://127.0.0.1:5000/audio', {
 				method: 'POST',
 				body: data
 			});

@@ -1,20 +1,21 @@
 import pandas as pd
 import datetime
 import calendar
+import matplotlib
 from collections import Counter
 
-def plot(dtlist):
-    datetime.datetime.now()
+matplotlib.use('AGG')
 
+def plot(datetimes):
     dateonly = []
 
-    for i in dtlist:
+    for i in datetimes:
         dateonly.append(i.date())
 
-    df = pd.DataFrame (dtlist, columns = ['date'])
+    df = pd.DataFrame(datetimes, columns = ['date'])
 
-    dfdate_only = df["date"].dt.date
-    df.groupby(df["date"].dt.date).count()
+    dfdate_only = df['date'].dt.date
+    df.groupby(df['date'].dt.date).count()
 
     #day of week
     print(calendar.day_name[datetime.datetime.now().weekday()])
@@ -29,7 +30,7 @@ def plot(dtlist):
 
     dfl7d = pd.DataFrame (l7d, columns = ['date'])
 
-    l7d_date = dfl7d["date"].dt.date
+    l7d_date = dfl7d['date'].dt.date
     l7d_date
 
     l7d_list = l7d_date.values.tolist()
@@ -58,9 +59,9 @@ def plot(dtlist):
 
 
 
-    final_df["date"] = final_df["date"].astype("datetime64")
+    final_df['date'] = final_df['date'].astype('datetime64')
 
 
-    plot = (final_df.groupby(final_df["date"].dt.day).count()-1).plot(kind="bar")
+    plot = (final_df.groupby(final_df['date'].dt.day).count()-1).plot(kind='bar')
     fig = plot.get_figure()
-    fig.savefig("output.png")
+    fig.savefig('static/plot.png')
