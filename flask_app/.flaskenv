@@ -1,2 +1,0 @@
-FLASK_APP=smart_doorbell.py
-FLASK_ENV=development

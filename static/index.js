@@ -1,0 +1,1 @@
+document.getElementById('unlock').onclick = () => fetch('localhost:5000/unlock');
