@@ -86,7 +86,7 @@ def server():
 if __name__ == '__main__':
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		server_socket.bind(('', 9001))
+		server_socket.bind(('', 9000))
 		server_socket.listen(1)
 		threading.Thread(target=server).start()
 	except:
