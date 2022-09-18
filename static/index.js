@@ -39,7 +39,7 @@ const handleSuccess = (stream) => {
 		soundClips.appendChild(deleteButton);
 		soundClips.appendChild(sendButton);
 
-		const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+		const blob = new Blob(chunks, { type: "audio/wav; codecs=opus" });
 		chunks = [];
 		const audioURL = window.URL.createObjectURL(blob);
 		audio.src = audioURL;
@@ -51,9 +51,14 @@ const handleSuccess = (stream) => {
 		};
 
 		// Send button
-		sendButton.onclick = (event) => {
-			// TODO
-		};
+		sendButton.onclick = () => {
+			const data = new FormData().append('audio', blob);
+			console.log(blob);
+			fetch('http://127.0.0.1:5000/sendaudio', {
+				method: 'POST',
+				body: data
+			});
+		}
 	};
 };
 
