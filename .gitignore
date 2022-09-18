@@ -1,3 +1,6 @@
 __pycache__/
 .vs/
 venv/
+
+static/out.*
+static/in.*
