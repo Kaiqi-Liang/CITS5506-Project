@@ -19,8 +19,9 @@ def server():
 		print('Accepted connection from the user')
 		while True:
 			try:
-				message = conn.recv(6)
-				print(message)
+				message = conn.recv(20)
+				if not message:
+					break
 				if message == b'unlock':
 					time.sleep(1)
 					servo.ChangeDutyCycle(UNLOCKED)
@@ -31,8 +32,15 @@ def server():
 
 					time.sleep(1)
 					conn.send(b'locked')
-				else:
-					break
+				elif message == b'start sending audio':
+					with open('in.wav', 'wb') as recording:
+						while True:
+							data = conn.recv(10000)
+							if data.endswith(b'finished sending audio'):
+								break
+							recording.write(data)
+					conn.send(b'received audio')
+					os.system('aplay in.wav')
 			except:
 				conn.close()
 				print('Lost connection with the user')
@@ -67,17 +75,13 @@ if __name__ == '__main__':
 	while True:
 		btn.wait_for_press()
 		client_socket.send(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S').encode())
-
-		response = client_socket.recv(15)
-		print(response)
+		print(client_socket.recv(15))
 
 		# image
 		conn = client_socket.makefile('wb')
 		camera.capture(conn, 'jpeg')
 		client_socket.send(b'finished sending image')
-
-		response = client_socket.recv(15)
-		print(response)
+		print(client_socket.recv(15))
 
 		# send audio
 		os.system('arecord --format=S16_LE --rate=16000 --file-type=wav --duration=3 out.wav')
@@ -85,9 +89,5 @@ if __name__ == '__main__':
 			for chunk in recording:
 				client_socket.send(chunk)
 		client_socket.send(b'finished sending audio')
-		response = client_socket.recv(15)
-		print(response)
-
-		# play audio
-		# os.system('aplay out.wav')
+		print(client_socket.recv(15))
 
