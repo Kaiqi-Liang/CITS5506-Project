@@ -10,10 +10,18 @@
 <body>
 	<h1>Smart Doorbell</h1>
 	<button id="unlock">Unlock</button>
+	<h1>Incoming</h1>
 	<audio controls>
 		<source src="{{url_for('static', filename='out.wav')}}" type="audio/wav">
 		Your browser does not support the audio tag.
 	</audio>
 	<img src="{{url_for('static', filename='out.jpeg')}}" alt="a picture taken at the doorbell">
+	<h1>Outgoing</h1>
+	<button id="record">Record</button>
+	<button id="stop">Stop</button>
+    <div id="sound-clips"></div>
+	<script>
+	</script>
 </body>
 </html>
+
