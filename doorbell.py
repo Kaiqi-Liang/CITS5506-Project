@@ -1,16 +1,16 @@
-from gpiozero import Button
+from helper import DOORBELL_ADDR_INFO, USER_ADDR_INFO, START_AUDIO, END_AUDIO, END_IMAGE, UNLOCK_SIGNAL, RECEIVED_MSG_LEN, data_to_file
 import RPi.GPIO as GPIO
-import socket
-import datetime
-import os
-import time
-import threading
+import gpiozero
 import picamera
 import vlc
+import os
+import threading
+import socket
+import time
+import datetime
 
 LOCKED = 2
 UNLOCKED = 12
-
 PIN_MOTOR = 11
 
 def server():
@@ -20,11 +20,12 @@ def server():
 		print('Accepted connection from the user')
 		while True:
 			try:
-				message = conn.recv(20)
-				print(message)
+				message = conn.recv(max(len(UNLOCK_SIGNAL), len(START_AUDIO)))
 				if not message:
+					conn.close()
 					break
-				if message == b'unlock':
+				print(message)
+				if message == UNLOCK_SIGNAL:
 					time.sleep(1)
 					servo.ChangeDutyCycle(UNLOCKED)
 
@@ -34,18 +35,12 @@ def server():
 
 					time.sleep(1)
 					conn.send(b'locked')
-				elif message == b'start sending audio':
-					with open('in.wav', 'wb') as recording:
-						while True:
-							data = conn.recv(10000)
-							if data.endswith(b'finished sending audio'):
-								data=data[:-len(b'finished sending audio')]
-								recording.write(data)
-								recording.close()
-								break
-							recording.write(data)
-					conn.send(b'received audio')
+				elif message == START_AUDIO:
+					data_to_file(conn, 'in.wav', END_AUDIO, b'received audio')
 					vlc.MediaPlayer('in.wav').play()
+				else:
+					conn.close()
+					break
 			except:
 				conn.close()
 				print('Lost connection with the user')
@@ -56,43 +51,40 @@ if __name__ == '__main__':
 	GPIO.setup(PIN_MOTOR, GPIO.OUT)
 	servo = GPIO.PWM(PIN_MOTOR, 50)
 	camera = picamera.PiCamera()
-	btn = Button(4)
+	btn = gpiozero.Button(4)
 
 	servo.start(0)
 	time.sleep(1)
-	print('Motor is ready to go')
 
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		client_socket.connect(('192.168.137.162', 9000))
-		print('Connected to user')
-		server_socket.bind(('', 8000))
+		client_socket.connect(USER_ADDR_INFO)
+		print('Connected to the user')
+		server_socket.bind(('', DOORBELL_ADDR_INFO[1]))
 		server_socket.listen(1)
 		server_thread = threading.Thread(name="server", target=server)
 		server_thread.start()
 	except:
 		client_socket.close()
 		server_socket.close()
-		print('Something went wrong')
+		print('Failed to connect to the user')
 		exit(1)
 
 	while True:
 		btn.wait_for_press()
 		client_socket.send(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S').encode())
-		print(client_socket.recv(15))
+		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received date' | b'invalid date'
 
-		# image
 		conn = client_socket.makefile('wb')
 		camera.capture(conn, 'jpeg')
-		client_socket.send(b'finished sending image')
-		print(client_socket.recv(15))
+		client_socket.send(END_IMAGE)
+		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received image'
 
-		# send audio
-		os.system('arecord --format=S16_LE --rate=16000 --file-type=wav --duration=3 out.wav')
-		with open('out.wav', 'rb') as recording:
-			for chunk in recording:
+		os.system('arecord --duration=5 out.wav')
+		with open('out.wav', 'rb') as audio:
+			for chunk in audio:
 				client_socket.send(chunk)
-		client_socket.send(b'finished sending audio')
-		print(client_socket.recv(15))
-
+			audio.close()
+		client_socket.send(END_AUDIO)
+		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received audio'

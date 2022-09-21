@@ -1,3 +1,4 @@
+from helper import DOORBELL_ADDR_INFO, START_AUDIO, END_AUDIO, END_IMAGE, UNLOCK_SIGNAL, USER_ADDR_INFO, RECEIVED_MSG_LEN, DATE_LEN, data_to_file
 import socket
 import datetime
 import threading
@@ -14,9 +15,9 @@ def index():
 def unlock():
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		client_socket.connect(('100.90.44.216', 8000))
-		client_socket.send(b'unlock')
-		print(client_socket.recv(6))
+		client_socket.connect(DOORBELL_ADDR_INFO)
+		client_socket.send(UNLOCK_SIGNAL)
+		print(client_socket.recv(6)) # b'locked'
 	except:
 		print('Failed to talk to the doorbell')
 		client_socket.close()
@@ -30,15 +31,16 @@ def audio():
 
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		client_socket.connect(('100.90.44.216', 8000))
-		client_socket.send(b'start sending audio')
-		with open('static/out.wav', 'rb') as recording:
-			for chunk in recording:
+		client_socket.connect(DOORBELL_ADDR_INFO)
+		client_socket.send(START_AUDIO)
+		with open('static/out.wav', 'rb') as audio:
+			for chunk in audio:
 				client_socket.send(chunk)
-		client_socket.send(b'finished sending audio')
-		print(client_socket.recv(15))
+			audio.close()
+		client_socket.send(END_AUDIO)
+		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received audio'
 	except:
-		print('Failed to talk to the doorbell')
+		print('Failed to establish a connection with the doorbell')
 		client_socket.close()
 	return {}
 
@@ -50,47 +52,27 @@ def server():
 		conn, _ = server_socket.accept()
 		while True:
 			try:
-				date = conn.recv(100)
+				date = conn.recv(DATE_LEN)
 				try:
 					datetimes.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
 					plot.plot(datetimes)
+					conn.send(b'received date')
 				except:
-					print('The doorbell did not send a valid date')
-				conn.send(b'received date')
-
-				# receive image
-				with open('static/in.jpeg', 'wb') as image:
-					while True:
-						data = conn.recv(10000)
-						FINISHED_SENDING_IMAGE = b'finished sending image'
-						if data.endswith(FINISHED_SENDING_IMAGE):
-							data = data[:-len(FINISHED_SENDING_IMAGE)]
-							image.write(data)
-							break
-						image.write(data)
-				conn.send(b'received image')
-
-				# receive audio
-				with open('static/in.wav', 'wb') as recording:
-					while True:
-						data = conn.recv(10000)
-						if data.endswith(b'finished sending audio'):
-							break
-						recording.write(data)
-				conn.send(b'received audio')
+					conn.send(b'invalid date')
+				data_to_file(conn, 'static/in.jpeg', END_IMAGE, b'received image')
+				data_to_file(conn, 'static/in.wav', END_AUDIO, b'received audio')
 			except:
 				conn.close()
 				print('Lost connection with the doorbell')
 				break
  
 if __name__ == '__main__':
+	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		server_socket.bind(('', 9000))
+		server_socket.bind(('', USER_ADDR_INFO(1)))
 		server_socket.listen(1)
 		threading.Thread(target=server).start()
 	except:
 		print('Failed to start the server')
 		server_socket.close()
-		exit(1)
-	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
