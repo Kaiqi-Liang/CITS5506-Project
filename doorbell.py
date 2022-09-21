@@ -6,6 +6,7 @@ import os
 import time
 import threading
 import picamera
+import vlc
 
 LOCKED = 2
 UNLOCKED = 12
@@ -20,6 +21,7 @@ def server():
 		while True:
 			try:
 				message = conn.recv(20)
+				print(message)
 				if not message:
 					break
 				if message == b'unlock':
@@ -37,10 +39,13 @@ def server():
 						while True:
 							data = conn.recv(10000)
 							if data.endswith(b'finished sending audio'):
+								data=data[:-len(b'finished sending audio')]
+								recording.write(data)
+								recording.close()
 								break
 							recording.write(data)
 					conn.send(b'received audio')
-					os.system('aplay in.wav')
+					vlc.MediaPlayer('in.wav').play()
 			except:
 				conn.close()
 				print('Lost connection with the user')
@@ -60,7 +65,7 @@ if __name__ == '__main__':
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		client_socket.connect(('100.90.40.209', 9000))
+		client_socket.connect(('192.168.137.162', 9000))
 		print('Connected to user')
 		server_socket.bind(('', 8000))
 		server_socket.listen(1)
