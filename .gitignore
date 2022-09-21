@@ -1,5 +1,3 @@
-__pycache__/
-.vs/
 venv/
 
 static/out.*
