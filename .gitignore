@@ -1,7 +1,5 @@
 venv/
-
 static/out.*
 static/in.*
 static/plot.*
 datetimes.yaml
-
