@@ -85,6 +85,5 @@ if __name__ == '__main__':
 		with open('out.wav', 'rb') as audio:
 			for chunk in audio:
 				client_socket.send(chunk)
-			audio.close()
 		client_socket.send(END_AUDIO)
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received audio'

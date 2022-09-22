@@ -6,7 +6,7 @@ from collections import Counter
 
 matplotlib.use('AGG')
 
-def plot(datetimes):
+def plot(datetimes: list[datetime.datetime]):
     dateonly = []
 
     for i in datetimes:

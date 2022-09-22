@@ -16,7 +16,6 @@ def data_to_file(conn: socket.socket, filename: str, endswith: bytes, message: b
 			if data.endswith(endswith):
 				data = data[:-len(endswith)]
 				file.write(data)
-				file.close()
 				break
 			file.write(data)
 	conn.send(message)

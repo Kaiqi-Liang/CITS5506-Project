@@ -3,6 +3,7 @@ import socket
 import datetime
 import threading
 import flask
+import yaml
 import plot
 
 APP = flask.Flask(__name__)
@@ -36,7 +37,6 @@ def audio():
 		with open('static/out.wav', 'rb') as audio:
 			for chunk in audio:
 				client_socket.send(chunk)
-			audio.close()
 		client_socket.send(END_AUDIO)
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received audio'
 	except:
@@ -44,18 +44,21 @@ def audio():
 		client_socket.close()
 	return {}
 
-datetimes: list[datetime.datetime] = []
+DATETIMES: list[datetime.datetime] = []
 
 def server():
 	print('Server is running')
 	while True:
 		conn, _ = server_socket.accept()
+		# TODO notification
 		while True:
 			try:
 				date = conn.recv(DATE_LEN)
 				try:
-					datetimes.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
-					plot.plot(datetimes)
+					DATETIMES.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
+					with open('datetimes.yaml', 'w') as file:
+						yaml.dump(DATETIMES, file)
+					plot.plot(DATETIMES)
 					conn.send(b'received date')
 				except:
 					conn.send(b'invalid date')
@@ -67,6 +70,8 @@ def server():
 				break
  
 if __name__ == '__main__':
+	with open('datetimes.yaml', 'r') as file:
+		DATETIMES = yaml.full_load()
 	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
