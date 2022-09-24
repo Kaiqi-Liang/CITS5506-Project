@@ -47,6 +47,7 @@ def server():
 				break
 
 if __name__ == '__main__':
+	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(PIN_MOTOR, GPIO.OUT)
 	servo = GPIO.PWM(PIN_MOTOR, 50)
@@ -81,7 +82,7 @@ if __name__ == '__main__':
 		client_socket.send(END_IMAGE)
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received image'
 
-		os.system('arecord --duration=5 out.wav')
+		os.system('arecord --duration=3 out.wav')
 		with open('out.wav', 'rb') as audio:
 			for chunk in audio:
 				client_socket.send(chunk)
