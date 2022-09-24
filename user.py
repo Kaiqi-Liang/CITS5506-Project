@@ -7,10 +7,20 @@ import yaml
 import plot
 
 APP = flask.Flask(__name__)
+DATETIMES: list[datetime.datetime] = []
+UPDATE = False
 
 @APP.route('/')
 def index():
 	return flask.render_template('index.html')
+
+@APP.route('/poll')
+def poll():
+	global UPDATE
+	if UPDATE:
+		UPDATE = False
+		return str(True)
+	return str(UPDATE)
 
 @APP.route('/unlock')
 def unlock():
@@ -44,13 +54,10 @@ def audio():
 		client_socket.close()
 	return {}
 
-DATETIMES: list[datetime.datetime] = []
-
 def server():
 	print('Server is running')
 	while True:
 		conn, _ = server_socket.accept()
-		# TODO notification
 		while True:
 			try:
 				date = conn.recv(DATE_LEN)
@@ -64,6 +71,8 @@ def server():
 					conn.send(b'invalid date')
 				data_to_file(conn, 'static/in.jpeg', END_IMAGE, b'received image')
 				data_to_file(conn, 'static/in.wav', END_AUDIO, b'received audio')
+				global UPDATE
+				UPDATE = True
 			except:
 				conn.close()
 				print('Lost connection with the doorbell')
@@ -72,12 +81,13 @@ def server():
 if __name__ == '__main__':
 	with open('datetimes.yaml', 'r') as file:
 		DATETIMES = yaml.full_load(file)
-	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		server_socket.bind(('', USER_ADDR_INFO(1)))
+		server_socket.bind(('', USER_ADDR_INFO[1]))
 		server_socket.listen(1)
 		threading.Thread(target=server).start()
 	except:
 		print('Failed to start the server')
 		server_socket.close()
+		exit(1)
+	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
