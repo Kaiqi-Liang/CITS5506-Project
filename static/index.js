@@ -1,5 +1,9 @@
 const SERVER_URL = 'http://127.0.0.1:5000';
-document.getElementById('unlock').onclick = () => fetch(`${SERVER_URL}/unlock`);
+const unlockButton = document.getElementById('unlock')
+unlockButton.onclick = () => {
+	unlockButton.toggleAttribute('disabled');
+	fetch(`${SERVER_URL}/unlock`).then(() => unlockButton.toggleAttribute('disabled'));
+};
 
 setInterval(() => {
 	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
@@ -24,15 +28,17 @@ const handleSuccess = (stream) => {
 
 	// Record button
 	record.onclick = () => {
+		stop.toggleAttribute('disabled');
+		record.toggleAttribute('disabled');
 		deleteClip();
 		mediaRecorder.start();
-		console.log(mediaRecorder.state);
 	};
 
 	// Stop button
 	stop.onclick = () => {
+		stop.toggleAttribute('disabled');
+		record.toggleAttribute('disabled');
 		mediaRecorder.stop();
-		console.log(mediaRecorder.state);
 	};
 
 	// Add data
