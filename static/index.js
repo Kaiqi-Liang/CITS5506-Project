@@ -7,8 +7,6 @@ setInterval(() => {
 			new Notification("Someone's at the door");
 			// TODO refresh the images and recording
 			// location.reload();
-		} else {
-			console.log(text);
 		}
 	});
 }, 5000);
@@ -16,12 +14,17 @@ setInterval(() => {
 const handleSuccess = (stream) => {
 	const record = document.getElementById('record');
 	const stop = document.getElementById('stop');
-	const soundClips = document.getElementById('sound-clips');
 	const mediaRecorder = new MediaRecorder(stream);
-	let chunks = [];
+	const soundClip = document.getElementById('sound-clip');
+	const deleteClip = () => {
+		while (soundClip.hasChildNodes()) {
+			soundClip.removeChild(soundClip.firstChild);
+		}
+	};
 
 	// Record button
 	record.onclick = () => {
+		deleteClip();
 		mediaRecorder.start();
 		console.log(mediaRecorder.state);
 	};
@@ -33,6 +36,7 @@ const handleSuccess = (stream) => {
 	};
 
 	// Add data
+	let chunks = [];
 	mediaRecorder.ondataavailable = (e) => {
 		chunks.push(e.data);
 	};
@@ -47,9 +51,9 @@ const handleSuccess = (stream) => {
 		deleteButton.innerHTML = 'Delete';
 		sendButton.innerHTML = 'Send';
 
-		soundClips.appendChild(audio);
-		soundClips.appendChild(deleteButton);
-		soundClips.appendChild(sendButton);
+		soundClip.appendChild(audio);
+		soundClip.appendChild(deleteButton);
+		soundClip.appendChild(sendButton);
 
 		const blob = new Blob(chunks, { type: 'audio/wav' });
 		chunks = [];
@@ -57,10 +61,7 @@ const handleSuccess = (stream) => {
 		audio.src = audioURL;
 
 		// Delete button
-		deleteButton.onclick = (event) => {
-			let target = event.target;
-			target.parentNode.parentNode.removeChild(target.parentNode);
-		};
+		deleteButton.onclick = deleteClip;
 
 		// Send button
 		sendButton.onclick = () => {
@@ -70,7 +71,7 @@ const handleSuccess = (stream) => {
 				method: 'POST',
 				body: data,
 			});
-		}
+		};
 	};
 };
 
