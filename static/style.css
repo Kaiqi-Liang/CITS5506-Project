@@ -1,3 +1,27 @@
-img {
-	width: 50%;
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  text-align: center;
+}
+
+.main {
+	flex: 50%;
+}
+
+.side {
+	flex: 25%;
+}
+
+div {
+	border: 1px solid black;
+}
+
+.locked {
+	text-transform: uppercase;
+	color: red;
+}
+
+.unlocked {
+	color: green;
 }
