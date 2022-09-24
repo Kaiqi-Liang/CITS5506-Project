@@ -1,7 +1,7 @@
 import socket
 
-USER_ADDR_INFO = ('192.168.137.162', 9000)
-DOORBELL_ADDR_INFO = ('100.90.44.216', 8000)
+USER_ADDR_INFO = ('100.90.40.209', 9000)
+DOORBELL_ADDR_INFO = ('100.90.47.138', 8000)
 START_AUDIO = b'start sending audio'
 END_AUDIO = b'finish sending audio'
 END_IMAGE = b'finish sending image'

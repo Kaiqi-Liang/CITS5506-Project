@@ -64,4 +64,4 @@ def plot(datetimes: list[datetime.datetime]):
 
     plot = (final_df.groupby(final_df['date'].dt.day).count()-1).plot(kind='bar')
     fig = plot.get_figure()
-    fig.savefig('static/plot.png')
+    fig.savefig('static/plot.jpeg')

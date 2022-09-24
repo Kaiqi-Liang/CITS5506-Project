@@ -15,8 +15,8 @@ Otherwise check the list of virtual environments on your system and make sure th
 Then create a new virtual environment called `iot` with all the dependencies installed and activate it.
 
 ```bash
-conda env create --file cv.yml
-conda activate cv
+conda env create --file iot.yml
+conda activate iot
 ```
 
 If it already exists just use another name that is not taken.

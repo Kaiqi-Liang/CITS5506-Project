@@ -1,43 +1,65 @@
-document.getElementById('unlock').onclick = () => fetch('http://127.0.0.1:5000/unlock');
+const SERVER_URL = 'http://127.0.0.1:5000';
+const unlockButton = document.getElementById('unlock')
+unlockButton.onclick = () => {
+	unlockButton.toggleAttribute('disabled');
+	fetch(`${SERVER_URL}/unlock`).then(() => unlockButton.toggleAttribute('disabled'));
+};
 
-const record = document.getElementById('record');
-const stop = document.getElementById('stop');
-const soundClips = document.getElementById('sound-clips');
+setInterval(() => {
+	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
+		if (text === 'True') {
+			new Notification("Someone's at the door");
+			// TODO refresh the images and recording
+			// location.reload();
+		}
+	});
+}, 5000);
 
 const handleSuccess = (stream) => {
+	const record = document.getElementById('record');
+	const stop = document.getElementById('stop');
 	const mediaRecorder = new MediaRecorder(stream);
-	let chunks = [];
+	const soundClip = document.getElementById('sound-clip');
+	const deleteClip = () => {
+		while (soundClip.hasChildNodes()) {
+			soundClip.removeChild(soundClip.firstChild);
+		}
+	};
 
-	// Record buton
+	// Record button
 	record.onclick = () => {
+		stop.toggleAttribute('disabled');
+		record.toggleAttribute('disabled');
+		deleteClip();
 		mediaRecorder.start();
-		console.log(mediaRecorder.state);
 	};
 
 	// Stop button
 	stop.onclick = () => {
+		stop.toggleAttribute('disabled');
+		record.toggleAttribute('disabled');
 		mediaRecorder.stop();
-		console.log(mediaRecorder.state);
 	};
 
 	// Add data
+	let chunks = [];
 	mediaRecorder.ondataavailable = (e) => {
 		chunks.push(e.data);
 	};
 
 	// Data to sound file
-	mediaRecorder.onstop = (e) => {
-		const audio = document.createElement("audio");
-		const deleteButton = document.createElement("button");
-		const sendButton = document.createElement("button");
+	mediaRecorder.onstop = () => {
+		const audio = document.createElement('audio');
+		const deleteButton = document.createElement('button');
+		const sendButton = document.createElement('button');
 
-		audio.setAttribute("controls", "");
-		deleteButton.innerHTML = "Delete";
-		sendButton.innerHTML = "Send";
+		audio.setAttribute('controls', '');
+		deleteButton.innerHTML = 'Delete';
+		sendButton.innerHTML = 'Send';
 
-		soundClips.appendChild(audio);
-		soundClips.appendChild(deleteButton);
-		soundClips.appendChild(sendButton);
+		soundClip.appendChild(audio);
+		soundClip.appendChild(deleteButton);
+		soundClip.appendChild(sendButton);
 
 		const blob = new Blob(chunks, { type: 'audio/wav' });
 		chunks = [];
@@ -45,21 +67,17 @@ const handleSuccess = (stream) => {
 		audio.src = audioURL;
 
 		// Delete button
-		deleteButton.onclick = (event) => {
-			let target = event.target;
-			target.parentNode.parentNode.removeChild(target.parentNode);
-		};
+		deleteButton.onclick = deleteClip;
 
 		// Send button
 		sendButton.onclick = () => {
 			const data = new FormData();
 			data.append('audio', blob);
-			console.log(blob);
-			fetch('http://127.0.0.1:5000/audio', {
+			fetch(`${SERVER_URL}/audio`, {
 				method: 'POST',
-				body: data
+				body: data,
 			});
-		}
+		};
 	};
 };
 
