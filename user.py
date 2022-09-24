@@ -9,6 +9,7 @@ import plot
 APP = flask.Flask(__name__)
 DATETIMES: list[datetime.datetime] = []
 UPDATE = False
+ERROR_MESSAGE = 'Failed to establish a connection with the doorbell'
 
 @APP.route('/')
 def index():
@@ -29,10 +30,11 @@ def unlock():
 		client_socket.connect(DOORBELL_ADDR_INFO)
 		client_socket.send(UNLOCK_SIGNAL)
 		print(client_socket.recv(6)) # b'locked'
+		return {}
 	except:
-		print('Failed to talk to the doorbell')
+		print(ERROR_MESSAGE)
 		client_socket.close()
-	return {}
+		return ERROR_MESSAGE, 500
 
 @APP.route('/audio', methods=['POST'])
 def audio():
@@ -49,10 +51,11 @@ def audio():
 				client_socket.send(chunk)
 		client_socket.send(END_AUDIO)
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received audio'
+		return {}
 	except:
-		print('Failed to establish a connection with the doorbell')
+		print(ERROR_MESSAGE)
 		client_socket.close()
-	return {}
+		return ERROR_MESSAGE, 500
 
 def server():
 	print('Server is running')

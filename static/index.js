@@ -1,8 +1,16 @@
 const SERVER_URL = 'http://127.0.0.1:5000';
 const unlockButton = document.getElementById('unlock')
-unlockButton.onclick = () => {
+const alertError = async (res) => {
+	if (!res.ok) {
+		const text = await res.text();
+		alert(text);
+	}
+};
+unlockButton.onclick = async () => {
 	unlockButton.toggleAttribute('disabled');
-	fetch(`${SERVER_URL}/unlock`).then(() => unlockButton.toggleAttribute('disabled'));
+	const res = await fetch(`${SERVER_URL}/unlock`);
+	alertError(res);
+	unlockButton.toggleAttribute('disabled');
 };
 
 setInterval(() => {
@@ -57,8 +65,8 @@ const handleSuccess = (stream) => {
 		sendButton.innerHTML = 'Send';
 
 		soundClip.appendChild(audio);
-		soundClip.appendChild(deleteButton);
 		soundClip.appendChild(sendButton);
+		soundClip.appendChild(deleteButton);
 
 		const blob = new Blob(chunks, { type: 'audio/wav' });
 		chunks = [];
@@ -69,13 +77,14 @@ const handleSuccess = (stream) => {
 		deleteButton.onclick = deleteClip;
 
 		// Send button
-		sendButton.onclick = () => {
+		sendButton.onclick = async () => {
 			const data = new FormData();
 			data.append('audio', blob);
-			fetch(`${SERVER_URL}/audio`, {
+			const res = await fetch(`${SERVER_URL}/audio`, {
 				method: 'POST',
 				body: data,
 			});
+			alertError(res);
 		};
 	};
 };
