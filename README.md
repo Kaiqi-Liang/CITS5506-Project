@@ -1,6 +1,29 @@
-# CITS5506-Project
+# CITS5506 Project
 
 ## Setup
+
+### Smart Doorbell (Run on Raspberry Pi)
+
+Update the `USER_ADDR_INFO` constant in [`helper.py`](helper.py) with the IP address of the computer that will be used to run the user code. Find the IP address of the Raspberry Pi.
+
+```bash
+ip=hostname -I
+```
+
+Install dependencies and run the doorbell code.
+
+```bash
+pip install vlc
+python doorbell.py
+```
+
+### User Interface (Run on any computer)
+
+Update the `DOORBELL_ADDR_INFO` constant in [`helper.py`](helper.py) with the IP address of the Raspberry Pi. Find the IP address of the computer.
+
+```bash
+ifconfig | egrep 'inet .* broadcast'
+```
 
 List all the virtual environments on your system.
 
@@ -27,7 +50,7 @@ conda env create --file name_not_taken.yml
 conda activate name_not_taken
 ```
 
-Run the server.
+Run the user code.
 
 ```bash
 python user.py

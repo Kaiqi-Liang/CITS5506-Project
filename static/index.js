@@ -8,9 +8,8 @@ unlockButton.onclick = () => {
 setInterval(() => {
 	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
 		if (text === 'True') {
-			new Notification("Someone's at the door");
-			// TODO refresh the images and recording
-			// location.reload();
+			const notification = new Notification("Someone's at the door");
+			notification.onclick = () => location.reload();
 		}
 	});
 }, 5000);
