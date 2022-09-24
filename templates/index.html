@@ -10,33 +10,31 @@
 	<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 </head>
 <body class="container">
-	<h1>Smart Doorbell</h1>
+	<h1 class="pt-3">Smart Doorbell</h1>
 	<div class="row flex-column flex-md-row">
-		<div class="side">
+		<div class="side box">
 			Content
 			<img class="img-fluid" src="{{url_for('static', filename='plot.jpeg')}}" alt="plot">
 		</div>
-		<main>
-			<div class="d-flex justify-content-between">
-				<p class="locked" id="status">Locked</p>
+		<main class="d-flex flex-column">
+			<div class="d-flex justify-content-between align-items-center box">
+				<span class="locked" id="status">Locked</span>
 				<button id="unlock">Unlock</button>
 			</div>
-			<div>Incoming
-				<div class="incoming">
-					<img class="img-fluid" src="{{url_for('static', filename='in.jpeg')}}" alt="a picture taken at the doorbell">
-					<audio controls>
-						<source src="{{url_for('static', filename='in.wav')}}" type="audio/wav">
-						Your browser does not support the audio tag.
-					</audio>
-				</div>
+			<div class="incoming box flex-grow-1">Incoming
+				<img class="img-fluid" src="{{url_for('static', filename='in.jpeg')}}" alt="a picture taken at the doorbell"><br>
+				<audio controls>
+					<source src="{{url_for('static', filename='in.wav')}}" type="audio/wav">
+					Your browser does not support the audio tag.
+				</audio>
 			</div>
-			<div>Outgoing<br>
+			<div class="box">Outgoing<br>
 				<button id="record">Record</button>
-				<button id="stop" disabled>Stop</button>
+				<button id="stop" disabled>Stop</button><br>
 				<div id="sound-clip"></div>
 			</div>
 		</main>
-		<div class="side">
+		<div class="side box">
 			Content
 		</div>
 	</div>

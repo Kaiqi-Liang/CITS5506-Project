@@ -1,27 +1,52 @@
 html, body {
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-  text-align: center;
-}
-
-main {
-	flex: 50%;
-}
-
-.side {
-	flex: 25%;
-}
-
-div {
-	border: 1px solid black;
-}
-
-.locked {
+	height: 100%;
+	width: 100%;
+	overflow-x: hidden;
+	text-align: center;
+	background-color: #E9EDF0;
+	font-family: sans-serif;
+  }
+  
+  .row {
+	min-height: 80%;
+  }
+  
+  main {
+	  flex: 50%;
+  }
+  
+  .side {
+	  flex: 25%;
+  }
+  
+  .box {
+	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+	margin-bottom: 10px;
+	border: 1px solid rgba(1, 1, 1, 0.6);
+  }
+  
+  div {
+	padding: 1%;
+  }
+  
+  #status {
 	text-transform: uppercase;
-	color: red;
-}
-
-.unlocked {
-	color: green;
-}
+	font-weight: bold;
+	color: #dc3545;
+  }
+  
+  .unlocked {
+	  color: #198754;
+  }
+  
+  button {
+	border: 1px solid rgba(1,1,1,0.5);
+	border-radius:2em;
+	padding: 4px 10px;
+	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+	transition: all;
+  }
+  
+  button:hover {
+	color: grey;
+  }
