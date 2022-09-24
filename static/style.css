@@ -5,7 +5,7 @@ html, body {
   text-align: center;
 }
 
-.main {
+main {
 	flex: 50%;
 }
 
