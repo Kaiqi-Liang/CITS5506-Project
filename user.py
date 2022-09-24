@@ -71,7 +71,7 @@ def server():
  
 if __name__ == '__main__':
 	with open('datetimes.yaml', 'r') as file:
-		DATETIMES = yaml.full_load()
+		DATETIMES = yaml.full_load(file)
 	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:

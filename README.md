@@ -1,16 +1,34 @@
 # CITS5506-Project
-## Build instructions
-### Virtual environment
-Navigate to directory containing app files
+
+## Setup
+
+List all the virtual environments on your system.
+
+```bash
+conda env list
 ```
-pip install virtualenv
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
+
+If you see the error messsage `command not found` go install [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
+
+Otherwise check the list of virtual environments on your system and make sure the name `iot` does not exist, if it does just use another name that is not taken.
+
+```bash
+mv iot.yml name_not_taken.yml
+conda env create --file name_not_taken.yml
+conda activate name_not_taken
 ```
-### Flask
-Navigate into folder containing flask files
+
+Else create a new virtual environment with this name and install all the dependencies.
+
+```bash
+conda env create --file cv.yml
+conda activate cv
 ```
-flask run
+
+Run the server.
+
+```bash
+python user.py
 ```
-Open http://localhost:5000/ to view the web page
+
+Open <http://localhost:5000/> to view the user interface.
