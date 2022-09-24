@@ -10,19 +10,21 @@ conda env list
 
 If you see the error messsage `command not found` go install [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
-Otherwise check the list of virtual environments on your system and make sure the name `iot` does not exist, if it does just use another name that is not taken.
+Otherwise check the list of virtual environments on your system and make sure the name `iot` does not exist.
+
+Then create a new virtual environment called `iot` with all the dependencies installed and activate it.
+
+```bash
+conda env create --file cv.yml
+conda activate cv
+```
+
+If it already exists just use another name that is not taken.
 
 ```bash
 mv iot.yml name_not_taken.yml
 conda env create --file name_not_taken.yml
 conda activate name_not_taken
-```
-
-Else create a new virtual environment with this name and install all the dependencies.
-
-```bash
-conda env create --file cv.yml
-conda activate cv
 ```
 
 Run the server.
