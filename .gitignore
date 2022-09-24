@@ -1,5 +1,4 @@
 __pycache__/
-static/out.*
-static/in.*
-static/plot.*
-datetimes.yaml
+*.wav
+*.jpeg
+datetimes.yml

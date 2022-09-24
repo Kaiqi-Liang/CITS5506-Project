@@ -1,5 +1,5 @@
 const SERVER_URL = 'http://127.0.0.1:5000';
-document.getElementById('unlock').onclick = () => fetch(`${SERVER_URL}unlock`);
+document.getElementById('unlock').onclick = () => fetch(`${SERVER_URL}/unlock`);
 
 setInterval(() => {
 	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
@@ -17,7 +17,6 @@ const handleSuccess = (stream) => {
 	const record = document.getElementById('record');
 	const stop = document.getElementById('stop');
 	const soundClips = document.getElementById('sound-clips');
-
 	const mediaRecorder = new MediaRecorder(stream);
 	let chunks = [];
 
@@ -39,7 +38,7 @@ const handleSuccess = (stream) => {
 	};
 
 	// Data to sound file
-	mediaRecorder.onstop = (e) => {
+	mediaRecorder.onstop = () => {
 		const audio = document.createElement('audio');
 		const deleteButton = document.createElement('button');
 		const sendButton = document.createElement('button');
