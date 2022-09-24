@@ -1,13 +1,19 @@
 # CITS5506 Project
 
+## Requirements
+
+* A Raspberry Pi.
+* A device that is capable of running `Miniconda` and `Flask` with a browser that supports [Notifications API](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API#browser_compatibility).
+* They must be connected to the same private network.
+
 ## Setup
 
 ### Smart Doorbell (Run on Raspberry Pi)
 
-Update the `USER_ADDR_INFO` constant in [`helper.py`](helper.py) with the IP address of the computer that will be used to run the user code. Find the IP address of the Raspberry Pi.
+Update the `USER_ADDR_INFO` constant in [helper.py](helper.py) with the private IP address of the computer that will be used to run the user code. Find the private IP address of the Raspberry Pi.
 
 ```bash
-ip=hostname -I
+hostname -I
 ```
 
 Install dependencies and run the doorbell code.
@@ -17,9 +23,9 @@ pip install vlc
 python doorbell.py
 ```
 
-### User Interface (Run on any computer)
+### User Interface (Run on any device)
 
-Update the `DOORBELL_ADDR_INFO` constant in [`helper.py`](helper.py) with the IP address of the Raspberry Pi. Find the IP address of the computer.
+Update the `DOORBELL_ADDR_INFO` constant in [helper.py](helper.py) with the private IP address of the Raspberry Pi. Find the private IP address of the computer.
 
 ```bash
 ifconfig | egrep 'inet .* broadcast'
