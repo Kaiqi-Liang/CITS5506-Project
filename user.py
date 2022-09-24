@@ -63,7 +63,7 @@ def server():
 				date = conn.recv(DATE_LEN)
 				try:
 					DATETIMES.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
-					with open('datetimes.yaml', 'w') as file:
+					with open('datetimes.yml', 'w') as file:
 						yaml.dump(DATETIMES, file)
 					plot.plot(DATETIMES)
 					conn.send(b'received date')
@@ -79,7 +79,7 @@ def server():
 				break
  
 if __name__ == '__main__':
-	with open('datetimes.yaml', 'r') as file:
+	with open('datetimes.yml', 'r') as file:
 		DATETIMES = yaml.full_load(file)
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
