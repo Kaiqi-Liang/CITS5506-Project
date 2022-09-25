@@ -13,7 +13,7 @@ ERROR_MESSAGE = 'Failed to establish a connection with the doorbell'
 
 @APP.route('/')
 def index():
-	return flask.render_template('index.html')
+	return flask.render_template('main.html')
 
 @APP.route('/poll')
 def poll():

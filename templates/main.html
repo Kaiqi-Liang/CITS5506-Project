@@ -4,44 +4,39 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home|Sudoku</title>
+    <title>Home|Smart Doorbell</title>
     <script src="https://kit.fontawesome.com/d5201e01cb.js" crossorigin="anonymous"></script>
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/main.css">
-{#    <script src="../static/javascript/play.js" defer></script>#}
-{#    <script src="../static/javascript/base.js" defer></script>#}
 </head>
 <body>
     <header>
-        <a><img src="../static/assets/textLogo.png" alt="" class="cod"></a>
-        <div class="menuIcon"><i class="fa-solid fa-bars fa-2xl"></i></div>
+        <a><img src="../static/assets/smartDoorbell.png" alt="" class="cod"></a>
+    </header>
 
-        <ul class="topbar">
-            {% if not current_user.is_authenticated %}
-            <li><a href="{{ url_for('main.index') }}" class="btn" >
-                Home
-            </a></li>
-            {% endif %}
-            {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('main.dashboard') }}" class="btn">
-                Dashboard
-            </a></li>
-            {% endif %}
-            <li><a href="{{ url_for('main.rules') }}" class="btn">
-                Rules
-            </a></li>
-            {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('auth.logout') }}" class="btn">
-                Logout
-            </a></li>
-            {% endif %}
-            <li>
-                <a class="dark-mode-toggle btn" id="dark-mode-toggle">
-                    <i class="bx bxs-moon"></i>
-                    <i class="bx bxs-sun"></i>
+    <section class="home" id="home">
+        <div class="left">
+            <div class="left-title">
+                DATA ANALYSIS
+            </div>
+            <div>
+                <a href=""><img class="plots" src="../static/assets/plot1.png" alt=""></a>
+            </div>
+            <div>
+                <a href=""><img class="plots" src="../static/assets/plot2.png" alt=""></a>
+            </div>
 
-                </a>
-            </li>
-        </ul>
+        </div>
+        <div class="middle">
+            Namaste
+        </div>
+        <div class="right">
+            <img class="plots" src="../static/assets/plot2.png" alt="">
+            <img class="plots" src="../static/assets/plot2.png" alt="">
+        </div>
+        
+        
+        </section>
+
 </body>
 </html>
