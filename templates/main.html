@@ -8,6 +8,7 @@
     <script src="https://kit.fontawesome.com/d5201e01cb.js" crossorigin="anonymous"></script>
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/main.css">
+    <script src="../static/index.js" defer></script>
 </head>
 <body>
     <header>
@@ -16,7 +17,7 @@
 
     <section class="home" id="home">
         <div class="left">
-            <div class="left-title">
+            <div class="title">
                 DATA ANALYSIS
             </div>
             <div>
@@ -28,11 +29,57 @@
 
         </div>
         <div class="middle">
-            Namaste
+            
+            <div class="main-container">
+                <div class="lock">
+                    <div class="title locked">
+                        LOCKED
+                    </div>
+                    <div class="title unlock" id="unlock">
+                        UNLOCK
+                    </div>
+                </div>
+
+                <div class="audio-box">
+                    <div class="in-audio">
+                        Visitors Audio
+                    </div>
+                    <audio controls>
+                        <source src="../static/assets/incoming_audio.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                      </audio>
+                </div>
+
+                <div class="audio-box outgoing">
+                    
+                    <audio controls class="outgoing-audio">
+                        <source src="../static/assets/incoming_audio.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                    </audio>
+
+                    <div class="out-audio">
+                        Your Audio
+                    </div>
+                </div>
+                
+                <div class="record-stop-buttons">
+                    <button class="record" id="record">Record</button>
+                    <button class="stop" id="stop" disabled>Stop</button><br>
+                </div>
+                
+
+            </div>
         </div>
         <div class="right">
-            <img class="plots" src="../static/assets/plot2.png" alt="">
-            <img class="plots" src="../static/assets/plot2.png" alt="">
+            <div class="title">
+                EXTRA INFO
+            </div>
+            <div>
+                <a href=""><img class="plots" src="../static/assets/selfie.jpeg" alt=""></a>
+            </div>
+            <div class="right-container">
+
+            </div>
         </div>
         
         

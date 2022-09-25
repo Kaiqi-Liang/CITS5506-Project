@@ -28,6 +28,9 @@ body {
     --black : black;
     --gray : gainsboro;
     --orange: #f89506;
+    --darkGray: #1C1B24;
+    --lightGray: #BFB7C7;
+
 }
 
 /* this is when we chnage the mode from dark to light or vice versa  */
@@ -76,7 +79,7 @@ section {
     align-items: center;
 }
 
-.left-title {
+.title {
     color: var(--charcoal);
     text-align: center;
     font-size: 24px;
@@ -88,6 +91,7 @@ section {
     margin-left: auto;
     margin-right: auto;
     padding: 10px 15px;
+    border: solid;
 }
 
 .plots {
@@ -97,5 +101,116 @@ section {
     object-fit: cover;
     border-radius: 20px;
     margin-bottom: 20px;
+    border: solid;
+    border-color: red;
 }
+
+.lock {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.locked {
+    margin-top: 20px;
+    background: red;
+    color: var(--white);
+    border-color: red;
+}
+
+.unlock {
+    margin-top: 20px;
+    background: var(--white);
+    color: var(--orange);
+    cursor: pointer;
+}
+
+.unlock:hover {
+    background: var(--charcoal);
+    color: var(--white);
+}
+
+.main-container {
+    height: 700px;
+    /* width: 400px; */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    /* border: solid; */
+    color: var(--orange);
+}
+
+.right-container {
+    height: 300px;
+    width: 400px;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    border: solid;
+    color: var(--orange);
+}
+
+.visitor-photo img {
+    border-radius: 20px;
+}
+
+.audio-box {
+    background: var(--darkGray);
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10%;
+    border-radius: 20px;
+    width: 670px;
+    padding: 30px 30px;
+}
+
+.in-audio {
+    margin-right: 50px;
+    color: var(--white);
+}
+
+.outgoing {
+    background: var(--lightGray);
+    margin-top: 20px;
+    justify-content:flex-end;
+}
+
+.outgoing-audio {
+    margin-right: 50px;
+}
+
+.out-audio {
+    color: var(--black);
+    margin-right: 30px;
+}
+
+.record-stop-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;    
+    justify-content: center;
+    align-items: center;
+}
+
+.record {
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin-right: 20px;
+    color: green;
+    border: solid;
+}
+
+.stop {
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: red;
+    border: solid;
+}
+
+
 
