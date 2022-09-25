@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
 	while True:
 		btn.wait_for_press()
-		vlc.MediaPlayer('doorbell.mp3').play()
+		vlc.MediaPlayer('static/doorbell.mp3').play()
 
 		client_socket.send(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S').encode())
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received date' | b'invalid date'

@@ -7,17 +7,20 @@ const alertError = async (res) => {
 	}
 };
 unlockButton.onclick = async () => {
-	unlockButton.toggleAttribute('disabled');
-	const res = await fetch(`${SERVER_URL}/unlock`);
-	alertError(res);
-	unlockButton.toggleAttribute('disabled');
+	const confirmation = confirm('Would you like to unlock the door?');
+	if (confirmation) {
+		unlockButton.toggleAttribute('disabled');
+		const res = await fetch(`${SERVER_URL}/unlock`);
+		alertError(res);
+		unlockButton.toggleAttribute('disabled');
+	}
 };
 
 setInterval(() => {
 	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
 		if (text === 'True') {
-			const notification = new Notification("Someone's at the door");
-			notification.onclick = () => {
+			new Audio('static/doorbell.mp3').play();
+			new Notification("Someone's at the door").onclick = () => {
 				const audio = document.querySelector('audio');
 				audio.src = 'static/out.wav';
 				audio.src = 'static/in.wav';
@@ -47,6 +50,7 @@ const handleSuccess = (stream) => {
 
 	// Record button
 	record.onclick = () => {
+		record.innerText += 'ing...';
 		stop.toggleAttribute('disabled');
 		record.toggleAttribute('disabled');
 		deleteClip();
@@ -55,6 +59,7 @@ const handleSuccess = (stream) => {
 
 	// Stop button
 	stop.onclick = () => {
+		record.innerText = 'Record';
 		stop.toggleAttribute('disabled');
 		record.toggleAttribute('disabled');
 		mediaRecorder.stop();
