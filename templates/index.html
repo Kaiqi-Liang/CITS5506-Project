@@ -11,31 +11,24 @@
 </head>
 <body class="container">
 	<header>
-		<img src="{{url_for('static', filename='doorbell.png')}}" alt="" class="cod">
+		<img src="{{url_for('static', filename='doorbell.png')}}" alt="logo">
 	</header>
-	<div class="row flex-column flex-md-row">
-		<div class="side box">
-			Content
-			<img class="img-fluid" src="{{url_for('static', filename='plot.jpeg')}}" alt="plot">
-		</div>
-		<main class="d-flex flex-column">
-			<div class="d-flex justify-content-between align-items-center box">
-				<span class="locked" id="status">Locked</span>
-				<button id="unlock">Unlock</button>
-			</div>
-			<div class="incoming box flex-grow-1">Incoming
-				<img class="img-fluid" src="{{url_for('static', filename='in.jpeg')}}" alt="a picture taken at the doorbell"><br>
-				<audio controls src="{{url_for('static', filename='in.wav')}}" />
-			</div>
-			<div class="box">Outgoing<br>
-				<button id="record">Record</button>
-				<button id="stop" disabled>Stop</button><br>
-				<div id="sound-clip"></div>
-			</div>
-		</main>
-		<div class="side box">
-			Content
-		</div>
+	<div class="d-flex justify-content-between align-items-center box">
+		<span class="locked" id="status">Locked</span>
+		<button id="unlock">Unlock</button>
+	</div>
+	<div class="incoming box flex-grow-1">Incoming
+		<img class="img-fluid" src="{{url_for('static', filename='in.jpeg')}}" alt="a picture taken at the doorbell"><br>
+		<audio controls src="{{url_for('static', filename='in.wav')}}" />
+	</div>
+	<div class="box">Outgoing<br>
+		<button id="record">Record</button>
+		<button id="stop" disabled>Stop</button><br>
+		<div id="sound-clip"></div>
+	</div>
+	<div class="side box">
+		Content
+		<img class="img-fluid" src="{{url_for('static', filename='plot.jpeg')}}" alt="plot">
 	</div>
 </body>
 <!-- JQuery and Bootstrap -->
