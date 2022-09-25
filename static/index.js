@@ -83,16 +83,20 @@ const handleSuccess = (stream) => {
 	// Data to sound file
 	mediaRecorder.onstop = () => {
 		const audio = document.createElement('audio');
+		const buttons = document.createElement('div');
 		const deleteButton = document.createElement('button');
 		const sendButton = document.createElement('button');
 
 		audio.setAttribute('controls', '');
+		audio.className = 'space-above';
+		buttons.className = 'space-above';
 		deleteButton.innerHTML = 'Delete';
 		sendButton.innerHTML = 'Send';
 
 		soundClip.appendChild(audio);
-		soundClip.appendChild(sendButton);
-		soundClip.appendChild(deleteButton);
+		soundClip.appendChild(buttons);
+		buttons.appendChild(sendButton);
+		buttons.appendChild(deleteButton);
 
 		const blob = new Blob(chunks, { type: 'audio/wav' });
 		chunks = [];
