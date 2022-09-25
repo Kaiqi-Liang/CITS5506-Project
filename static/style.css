@@ -1,9 +1,5 @@
 :root {
 	--charcoal: #313848;
-	--yellow : #FEE715FF;
-	--white : #fff;
-	--black : black;
-	--gray : gainsboro;
 	--orange: #f89506;
 	--darkGray: #1C1B24;
 	--lightGray: #BFB7C7;
@@ -74,18 +70,4 @@ button:hover:not([disabled]) {
 
 .space-above {
 	margin-top: 30px;
-}
-
-.row {
-	min-height: 80%;
-}
-
-#status {
-	text-transform: uppercase;
-	font-weight: bold;
-	color: #dc3545;
-}
-
-.unlocked {
-	color: #198754;
 }
