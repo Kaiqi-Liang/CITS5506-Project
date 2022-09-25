@@ -10,6 +10,9 @@ RECEIVED_MSG_LEN = 15
 DATE_LEN = 100
 
 def data_to_file(conn: socket.socket, filename: str, endswith: bytes, message: bytes):
+	'''
+	Receive a stream of data and write them to a file
+	'''
 	with open(filename, 'wb') as file:
 		while True:
 			data = conn.recv(10000)

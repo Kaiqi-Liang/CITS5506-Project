@@ -14,6 +14,11 @@ UNLOCKED = 12
 PIN_MOTOR = 11
 
 def server():
+	'''
+	Server code to receive data from the user
+	including a unlock command and
+	an audio recording
+	'''
 	print('Server is running')
 	while True:
 		conn, _ = server_socket.accept()
@@ -26,6 +31,7 @@ def server():
 					break
 				print(message)
 				if message == UNLOCK_SIGNAL:
+					# Receive the unlock command and turn the motor
 					time.sleep(1)
 					servo.ChangeDutyCycle(UNLOCKED)
 
@@ -36,6 +42,7 @@ def server():
 					time.sleep(1)
 					conn.send(b'locked')
 				elif message == START_AUDIO:
+					# Receive the audio recording and play it immediately
 					data_to_file(conn, 'in.wav', END_AUDIO, b'received audio')
 					vlc.MediaPlayer('in.wav').play()
 				else:
@@ -47,6 +54,7 @@ def server():
 				break
 
 if __name__ == '__main__':
+	# Configure GPIO pins on Raspberry Pi
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(PIN_MOTOR, GPIO.OUT)
@@ -54,10 +62,13 @@ if __name__ == '__main__':
 	camera = picamera.PiCamera()
 	btn = gpiozero.Button(4)
 
+	# Get the motor ready to turn
 	servo.start(0)
 	time.sleep(1)
 
+	# Client socket for sending datetime object, image and audio to the user
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	# Server socket for listening to the unlock command and receiving audio recording from the user
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		client_socket.connect(USER_ADDR_INFO)
@@ -73,17 +84,21 @@ if __name__ == '__main__':
 		exit(1)
 
 	while True:
+		# Waiting for the doorbell to be pressed
 		btn.wait_for_press()
 		vlc.MediaPlayer('static/doorbell.mp3').play()
 
+		# Record the current datetime and send it to the user
 		client_socket.send(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S').encode())
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received date' | b'invalid date'
 
+		# Take a picture and send it to the user
 		conn = client_socket.makefile('wb')
 		camera.capture(conn, 'jpeg')
 		client_socket.send(END_IMAGE)
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received image'
 
+		# Record for 3 seconds and send it to the user
 		os.system('arecord --duration=3 out.wav')
 		with open('out.wav', 'rb') as audio:
 			for chunk in audio:
