@@ -5,48 +5,48 @@ html, body {
 	text-align: center;
 	background-color: #E9EDF0;
 	font-family: sans-serif;
-  }
+}
   
-  .row {
+.row {
 	min-height: 80%;
-  }
+}
   
-  main {
-	  flex: 50%;
-  }
+main {
+	flex: 50%;
+}
   
-  .side {
-	  flex: 25%;
-  }
+.side {
+	flex: 25%;
+}
   
-  .box {
+.box {
 	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 	margin-bottom: 10px;
 	border: 1px solid rgba(1, 1, 1, 0.6);
-  }
+}
   
-  div {
+div {
 	padding: 1%;
-  }
+}
   
-  #status {
+#status {
 	text-transform: uppercase;
 	font-weight: bold;
 	color: #dc3545;
-  }
+}
   
-  .unlocked {
-	  color: #198754;
-  }
+.unlocked {
+	color: #198754;
+}
   
-  button {
+button {
 	border: 1px solid rgba(1,1,1,0.5);
 	border-radius:2em;
 	padding: 4px 10px;
 	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 	transition: all;
-  }
+}
   
-  button:hover {
+button:hover {
 	color: grey;
-  }
+}
