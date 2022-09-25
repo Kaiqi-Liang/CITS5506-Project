@@ -92,3 +92,9 @@ const handleSuccess = (stream) => {
 navigator.mediaDevices
 	.getUserMedia({ audio: true, video: false })
 	.then(handleSuccess);
+
+// testing only
+function refreshImage(imgID, url) {
+	const img = document.getElementById(imgID);
+	img.src = url + "?t=" + new Date().getTime();
+}
