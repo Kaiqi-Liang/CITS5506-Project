@@ -3,7 +3,6 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="Cache-control" content="max-age=0, must-revalidate">
 	<title>Smart Doorbell</title>
 	<script defer src="{{url_for('static', filename='index.js')}}"></script>
 	<!-- Stylesheets -->
@@ -23,11 +22,8 @@
 				<button id="unlock">Unlock</button>
 			</div>
 			<div class="incoming box flex-grow-1">Incoming
-				<img class="img-fluid" src="{{url_for('static', filename='in.jpeg')}}" alt="a picture taken at the doorbell" id="doorbell-img"><br>
-				<audio controls>
-					<source src="{{url_for('static', filename='in.wav')}}" type="audio/wav">
-					Your browser does not support the audio tag.
-				</audio>
+				<img class="img-fluid" src="{{url_for('static', filename='in.jpeg')}}" alt="a picture taken at the doorbell"><br>
+				<audio controls src="{{url_for('static', filename='in.wav')}}" />
 			</div>
 			<div class="box">Outgoing<br>
 				<button id="record">Record</button>

@@ -17,7 +17,19 @@ setInterval(() => {
 	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
 		if (text === 'True') {
 			const notification = new Notification("Someone's at the door");
-			notification.onclick = () => location.reload();
+			notification.onclick = () => {
+				const audio = document.querySelector('audio');
+				audio.src = 'static/out.wav';
+				audio.src = 'static/in.wav';
+
+				document.querySelectorAll('img').forEach((img) => {
+					const src = img.src;
+					img.src = 'static/spinner.svg';
+					setTimeout(() => {
+						img.src = src;
+					}, 1000);
+				});
+			};
 		}
 	});
 }, 5000);
@@ -92,9 +104,3 @@ const handleSuccess = (stream) => {
 navigator.mediaDevices
 	.getUserMedia({ audio: true, video: false })
 	.then(handleSuccess);
-
-// testing only
-function refreshImage(imgID, url) {
-	const img = document.getElementById(imgID);
-	img.src = url + "?t=" + new Date().getTime();
-}
