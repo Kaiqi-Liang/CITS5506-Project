@@ -1,4 +1,5 @@
 from helper import DOORBELL_ADDR_INFO, START_AUDIO, END_AUDIO, END_IMAGE, UNLOCK_SIGNAL, USER_ADDR_INFO, RECEIVED_MSG_LEN, DATE_LEN, data_to_file
+import os
 import socket
 import datetime
 import threading
@@ -102,6 +103,9 @@ def server():
  
 if __name__ == '__main__':
 	# Read in the database which stores all the datetimes when the doorbell was pressed
+	if not os.path.isfile('datetimes.yml'):
+		with open('datetimes.yml', 'w'):
+			pass
 	with open('datetimes.yml', 'r') as file:
 		DATETIMES = yaml.full_load(file)
 

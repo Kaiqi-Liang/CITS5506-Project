@@ -15,7 +15,7 @@ def plot(datetimes: list[datetime.datetime]):
         l7d.append(datetime.datetime.now() - datetime.timedelta(days=start))
         start = start + 1
     dfl7d = pd.DataFrame(l7d, columns=['date'])
-    l7d_date = dfl7d["date"].dt.date
+    l7d_date = dfl7d['date'].dt.date
 
     l7d_list = l7d_date.values.tolist()
     dateonly_list = dfdate_only.values.tolist()
@@ -23,17 +23,17 @@ def plot(datetimes: list[datetime.datetime]):
     final_list = l3 + l7d_list
 
     final_df = pd.DataFrame(final_list, columns=['date'])
-    final_df["date"] = final_df["date"].astype("datetime64")
+    final_df['date'] = final_df['date'].astype('datetime64')
 
-    final_df_grouped = final_df.groupby(["date"]).agg(
-        count_col=pd.NamedAgg(column="date", aggfunc="count")
+    final_df_grouped = final_df.groupby(['date']).agg(
+        count=pd.NamedAgg(column='date', aggfunc='count')
     )
-    final_df_grouped['count_col'] = final_df_grouped['count_col'] - 1
+    final_df_grouped['count'] = final_df_grouped['count'] - 1
 
     final_df_grouped = final_df_grouped.reset_index()
     final_df_grouped['date'] = final_df_grouped['date'].dt.day_name()
-    final_df_grouped['count_col'] = final_df_grouped['count_col'].astype('int')
+    final_df_grouped['count'] = final_df_grouped['count'].astype('int')
 
     seaborn.set_style('darkgrid')
-    seaborn.barplot(final_df_grouped['date'], final_df_grouped['count_col'])
+    seaborn.barplot(final_df_grouped['date'], final_df_grouped['count'])
     matplotlib.pyplot.savefig('static/plot.jpeg')
