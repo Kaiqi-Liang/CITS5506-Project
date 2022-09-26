@@ -75,6 +75,7 @@ const deleteClip = () => {
 
 // Record button
 record.onclick = () => {
+	record.toggleAttribute('disabled');
 	navigator.mediaDevices
 	.getUserMedia({ audio: true, video: false })
 	.then((stream) => {
@@ -82,7 +83,6 @@ record.onclick = () => {
 		const mediaRecorder = new MediaRecorder(stream);
 		record.innerText += 'ing...';
 		stop.toggleAttribute('disabled');
-		record.toggleAttribute('disabled');
 		deleteClip();
 		mediaRecorder.start();
 
@@ -145,5 +145,6 @@ record.onclick = () => {
 	})
 	.catch((err) => {
 		alert(err);
+		record.toggleAttribute('disabled');
 	});
 };
