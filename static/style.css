@@ -1,6 +1,8 @@
 :root {
 	--charcoal: #313848;
 	--orange: #f89506;
+	--cyan: #5fadbf;
+	--lightRed: #ff5153;
 	--darkGray: #1C1B24;
 	--lightGray: #BFB7C7;
 	--darkPurple: #6718cf;
@@ -70,4 +72,84 @@ button:hover:not([disabled]) {
 
 .space-above {
 	margin-top: 30px;
+}
+
+#unlock {
+	margin-top: 10px;
+}
+
+.lock {
+	width: 30px;
+	height: 25px;
+	border: 3px solid var(--cyan);
+	border-radius: 5px;
+	position: relative;
+	cursor: pointer;
+	-webkit-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+}
+
+.lock:after {
+	content: "";
+	display: block;
+	background: var(--cyan);
+	width: 3px;
+	height: 7px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -3.5px 0 0 -2px;
+	-webkit-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+}
+
+.lock:before {
+	content: "";
+	display: block;
+	width: 15px;
+	height: 15px;
+	bottom: 100%;
+	position: absolute;
+	left: 50%;
+	margin-left: -8px;
+	border: 3px solid var(--cyan);
+	border-top-right-radius: 50%;
+	border-top-left-radius: 50%;
+	border-bottom: 0;
+	-webkit-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+}
+
+/* Locked Hover */
+.lock:hover:before {
+	height: 17px;
+}
+
+/* Unlocked */
+.unlocked {
+	transform: rotate(10deg);
+}
+
+.unlocked:before {
+	bottom: 130%;
+	left: 31%;
+	margin-left: -11.5px;
+	transform: rotate(-45deg);
+}
+
+.unlocked, .unlocked:before {
+	border-color: var(--lightRed);
+}
+
+.unlocked:after {
+	background: var(--lightRed);
+}
+
+/* Unlocked Hover */
+.unlocked:hover:before {
+	height: 15px;
+}
+
+.lock[disabled] {
+	cursor: auto;
 }

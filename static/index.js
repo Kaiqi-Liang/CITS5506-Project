@@ -1,6 +1,6 @@
-// Global variables
 const SERVER_URL = 'http://127.0.0.1:5000';
 const unlockButton = document.getElementById('unlock')
+const lock = document.querySelector('.lock')
 const record = document.getElementById('record');
 const stop = document.getElementById('stop');
 const soundClip = document.getElementById('sound-clip');
@@ -14,14 +14,32 @@ const alertError = async (res) => {
 };
 
 // Remote unlock the door
-unlockButton.onclick = async () => {
+const unlock = async () => {
+	const locked = () => {
+		lock.classList.remove('unlocked');
+		lock.addEventListener('click', unlock);
+		lock.removeAttribute('disabled');
+		unlockButton.removeAttribute('disabled');
+	};
 	if (confirm('Would you like to unlock the door?')) {
+		setTimeout(() => {
+			if (lock.hasAttribute('disabled')) locked();
+		}, 3000);
+		lock.classList.add('unlocked');
+		lock.removeEventListener('click', unlock);
+		lock.toggleAttribute('disabled');
 		unlockButton.toggleAttribute('disabled');
+
 		const res = await fetch(`${SERVER_URL}/unlock`);
-		alertError(res);
-		unlockButton.toggleAttribute('disabled');
+		setTimeout(() => {
+			alertError(res);
+		}, 100);
+		locked();
 	}
 };
+
+unlockButton.onclick = unlock;
+lock.addEventListener('click', unlock);
 
 // Poll the backend every 5 seconds to check for updates
 setInterval(() => {
@@ -78,8 +96,8 @@ record.onclick = () => {
 
 		// Add data
 		let chunks = [];
-		mediaRecorder.ondataavailable = (e) => {
-			chunks.push(e.data);
+		mediaRecorder.ondataavailable = (event) => {
+			chunks.push(event.data);
 		};
 
 		// Data to sound file
@@ -113,6 +131,7 @@ record.onclick = () => {
 
 			// Send button
 			sendButton.onclick = async () => {
+				sendButton.toggleAttribute('disabled');
 				const data = new FormData();
 				data.append('audio', blob);
 				const res = await fetch(`${SERVER_URL}/audio`, {
@@ -120,10 +139,11 @@ record.onclick = () => {
 					body: data,
 				});
 				alertError(res);
+				sendButton.toggleAttribute('disabled');
 			};
 		};
 	})
 	.catch((err) => {
-		alertError(err);
+		alert(err);
 	});
 };
