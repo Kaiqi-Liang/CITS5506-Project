@@ -65,8 +65,8 @@ button {
 	background: var(--lightPurple);
 	padding: 10px 20px;
 	width: 10vw;
+	margin-top: 10px;
 	min-width: 9em;
-	margin-bottom: 8px;
 }
 
 button:hover:not([disabled]) {
@@ -74,12 +74,8 @@ button:hover:not([disabled]) {
 	cursor: pointer;
 }
 
-.space-above, #circle {
+#circle {
 	margin-top: 30px;
-}
-
-#unlock, #record {
-	margin-top: 10px;
 }
 
 .lock {
@@ -216,17 +212,17 @@ header > img {
 .recording {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 0 24 24' width='24px' fill='%23FFFFFF'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M6 6h12v12H6z'/%3E%3C/svg%3E");
 	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-	animation: pulse 1.9s infinite;
+	animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
 	0% {
-		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
 	}
-	70% {
-		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	99% {
+		box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
 	}
 	100% {
-		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
 	}
 }
