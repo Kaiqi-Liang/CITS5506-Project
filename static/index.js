@@ -1,9 +1,10 @@
 const SERVER_URL = 'http://127.0.0.1:5000';
 const unlockButton = document.getElementById('unlock')
 const lock = document.querySelector('.lock')
-const record = document.getElementById('record');
+const recordButton = document.getElementById('record');
 const stop = document.getElementById('stop');
 const soundClip = document.getElementById('sound-clip');
+const recordIcon = document.getElementById('circle');
 
 // Alert the error message if backend returns a non 200 status code
 const alertError = async (res) => {
@@ -74,26 +75,28 @@ const deleteClip = () => {
 	}
 };
 
-// Record button
-record.onclick = () => {
-	navigator.mediaDevices
-	.getUserMedia({ audio: true, video: false })
-	.then((stream) => {
+const startRecording = () => {
+	navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
 		// Start media stream
 		const mediaRecorder = new MediaRecorder(stream);
 		mediaRecorder.start();
 
-		record.innerText += 'ing...';
-		stop.toggleAttribute('disabled');
-		deleteClip();
-
-		stop.onclick = () => {
-			record.innerText = 'Record';
-			record.toggleAttribute('disabled');
-			record.toggleAttribute('disabled');
+		const stopRecording = () => {
+			recordIcon.classList.remove('recording');
+			recordIcon.onclick = startRecording;
+			recordButton.innerText = 'Record';
+			recordButton.toggleAttribute('disabled');
 			stop.toggleAttribute('disabled');
 			mediaRecorder.stop();
 		};
+
+		recordIcon.classList.add('recording');
+		recordIcon.onclick = stopRecording;
+		recordButton.innerText += 'ing...';
+		recordButton.toggleAttribute('disabled');
+		stop.toggleAttribute('disabled');
+		stop.onclick = stopRecording;
+		deleteClip();
 
 		// Get audio data
 		let data;
@@ -139,4 +142,8 @@ record.onclick = () => {
 			};
 		};
 	});
-};
+}
+
+// Record button
+recordButton.onclick = startRecording;
+recordIcon.onclick = startRecording;
