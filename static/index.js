@@ -131,6 +131,7 @@ const startRecording = () => {
 
 			sendButton.onclick = async () => {
 				sendButton.toggleAttribute('disabled');
+				sendButton.innerText += 'ing...';
 				const data = new FormData();
 				data.append('audio', blob);
 				const res = await fetch(`${SERVER_URL}/audio`, {
@@ -139,6 +140,7 @@ const startRecording = () => {
 				});
 				alertError(res);
 				sendButton.toggleAttribute('disabled');
+				sendButton.innerHTML = 'Send';
 			};
 		};
 	});
