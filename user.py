@@ -49,6 +49,7 @@ def audio():
 	'''
 	Send a recording to the doorbell
 	'''
+	# Convert audio data to a wav file
 	files = flask.request.files
 	audio = files.get('audio')
 	audio.save('static/out.wav')

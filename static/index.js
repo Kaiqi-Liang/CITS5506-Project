@@ -38,6 +38,7 @@ const unlock = async () => {
 	}
 };
 
+// Unlock button and icon
 unlockButton.onclick = unlock;
 lock.addEventListener('click', unlock);
 
@@ -80,12 +81,12 @@ record.onclick = () => {
 	.then((stream) => {
 		// Start media stream
 		const mediaRecorder = new MediaRecorder(stream);
+		mediaRecorder.start();
+
 		record.innerText += 'ing...';
 		stop.toggleAttribute('disabled');
 		deleteClip();
-		mediaRecorder.start();
 
-		// Stop button
 		stop.onclick = () => {
 			record.innerText = 'Record';
 			record.toggleAttribute('disabled');
@@ -94,15 +95,14 @@ record.onclick = () => {
 			mediaRecorder.stop();
 		};
 
-		// Add data
-		let chunks = [];
+		// Get audio data
+		let data;
 		mediaRecorder.ondataavailable = (event) => {
-			chunks.push(event.data);
+			data = event.data;
 		};
 
-		// Data to sound file
 		mediaRecorder.onstop = () => {
-			// Create elements
+			// Create recording playback section
 			const audio = document.createElement('audio');
 			const buttons = document.createElement('div');
 			const deleteButton = document.createElement('button');
@@ -114,22 +114,18 @@ record.onclick = () => {
 			deleteButton.innerHTML = 'Delete';
 			sendButton.innerHTML = 'Send';
 
-			// Append elements
 			soundClip.appendChild(audio);
 			soundClip.appendChild(buttons);
 			buttons.appendChild(sendButton);
 			buttons.appendChild(deleteButton);
 
-			// Create blob
-			const blob = new Blob(chunks, { type: 'audio/wav' });
-			chunks = [];
+			// Convert audio data to a URL
+			const blob = new Blob([data], { type: 'audio/wav' });
 			const audioURL = window.URL.createObjectURL(blob);
 			audio.src = audioURL;
 
-			// Delete button
 			deleteButton.onclick = deleteClip;
 
-			// Send button
 			sendButton.onclick = async () => {
 				sendButton.toggleAttribute('disabled');
 				const data = new FormData();
@@ -142,5 +138,5 @@ record.onclick = () => {
 				sendButton.toggleAttribute('disabled');
 			};
 		};
-	})
+	});
 };
