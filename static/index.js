@@ -1,5 +1,9 @@
+// Global variables
 const SERVER_URL = 'http://127.0.0.1:5000';
 const unlockButton = document.getElementById('unlock')
+const record = document.getElementById('record');
+const stop = document.getElementById('stop');
+const soundClip = document.getElementById('sound-clip');
 
 // Alert the error message if backend returns a non 200 status code
 const alertError = async (res) => {
@@ -44,81 +48,82 @@ setInterval(() => {
 	});
 }, 5000);
 
-const handleSuccess = (stream) => {
-	const record = document.getElementById('record');
-	const stop = document.getElementById('stop');
-	const mediaRecorder = new MediaRecorder(stream);
-	const soundClip = document.getElementById('sound-clip');
+// Delete the recorded audio section
+const deleteClip = () => {
+	while (soundClip.hasChildNodes()) {
+		soundClip.removeChild(soundClip.firstChild);
+	}
+};
 
-	// Delete the recorded audio section
-	const deleteClip = () => {
-		while (soundClip.hasChildNodes()) {
-			soundClip.removeChild(soundClip.firstChild);
-		}
-	};
-
-	// Record button
-	record.onclick = () => {
+// Record button
+record.onclick = () => {
+	navigator.mediaDevices
+	.getUserMedia({ audio: true, video: false })
+	.then((stream) => {
+		// Start media stream
+		const mediaRecorder = new MediaRecorder(stream);
 		record.innerText += 'ing...';
 		stop.toggleAttribute('disabled');
 		record.toggleAttribute('disabled');
 		deleteClip();
 		mediaRecorder.start();
-	};
 
-	// Stop button
-	stop.onclick = () => {
-		record.innerText = 'Record';
-		stop.toggleAttribute('disabled');
-		record.toggleAttribute('disabled');
-		mediaRecorder.stop();
-	};
-
-	// Add data
-	let chunks = [];
-	mediaRecorder.ondataavailable = (e) => {
-		chunks.push(e.data);
-	};
-
-	// Data to sound file
-	mediaRecorder.onstop = () => {
-		const audio = document.createElement('audio');
-		const buttons = document.createElement('div');
-		const deleteButton = document.createElement('button');
-		const sendButton = document.createElement('button');
-
-		audio.setAttribute('controls', '');
-		audio.className = 'space-above';
-		buttons.className = 'space-above';
-		deleteButton.innerHTML = 'Delete';
-		sendButton.innerHTML = 'Send';
-
-		soundClip.appendChild(audio);
-		soundClip.appendChild(buttons);
-		buttons.appendChild(sendButton);
-		buttons.appendChild(deleteButton);
-
-		const blob = new Blob(chunks, { type: 'audio/wav' });
-		chunks = [];
-		const audioURL = window.URL.createObjectURL(blob);
-		audio.src = audioURL;
-
-		// Delete button
-		deleteButton.onclick = deleteClip;
-
-		// Send button
-		sendButton.onclick = async () => {
-			const data = new FormData();
-			data.append('audio', blob);
-			const res = await fetch(`${SERVER_URL}/audio`, {
-				method: 'POST',
-				body: data,
-			});
-			alertError(res);
+		// Stop button
+		stop.onclick = () => {
+			record.innerText = 'Record';
+			stop.toggleAttribute('disabled');
+			record.toggleAttribute('disabled');
+			mediaRecorder.stop();
 		};
-	};
-};
 
-navigator.mediaDevices
-	.getUserMedia({ audio: true, video: false })
-	.then(handleSuccess);
+		// Add data
+		let chunks = [];
+		mediaRecorder.ondataavailable = (e) => {
+			chunks.push(e.data);
+		};
+
+		// Data to sound file
+		mediaRecorder.onstop = () => {
+			// Create elements
+			const audio = document.createElement('audio');
+			const buttons = document.createElement('div');
+			const deleteButton = document.createElement('button');
+			const sendButton = document.createElement('button');
+
+			audio.setAttribute('controls', '');
+			audio.className = 'space-above';
+			buttons.className = 'space-above';
+			deleteButton.innerHTML = 'Delete';
+			sendButton.innerHTML = 'Send';
+
+			// Append elements
+			soundClip.appendChild(audio);
+			soundClip.appendChild(buttons);
+			buttons.appendChild(sendButton);
+			buttons.appendChild(deleteButton);
+
+			// Create blob
+			const blob = new Blob(chunks, { type: 'audio/wav' });
+			chunks = [];
+			const audioURL = window.URL.createObjectURL(blob);
+			audio.src = audioURL;
+
+			// Delete button
+			deleteButton.onclick = deleteClip;
+
+			// Send button
+			sendButton.onclick = async () => {
+				const data = new FormData();
+				data.append('audio', blob);
+				const res = await fetch(`${SERVER_URL}/audio`, {
+					method: 'POST',
+					body: data,
+				});
+				alertError(res);
+			};
+		};
+	})
+	.catch((err) => {
+		alertError(err);
+	});
+};
