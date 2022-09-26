@@ -13,6 +13,8 @@ html, body {
 	text-align: center;
 	background: var(--charcoal);
 	font-family: sans-serif;
+	scrollbar-color: var(--orange);
+	scrollbar-width: 5px;
 }
 
 section {
@@ -180,4 +182,17 @@ header > img {
 	section {
 		max-width: 90%;
 	}
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 5px;
+}
+  
+::-webkit-scrollbar-track {
+	background-color: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb {
+	background-color: var(--orange);
+	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
 }
