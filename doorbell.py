@@ -86,10 +86,14 @@ if __name__ == '__main__':
 	while True:
 		# Waiting for the doorbell to be pressed
 		btn.wait_for_press()
+
+		# Play a doorbell ringing sound
 		vlc.MediaPlayer('static/doorbell.mp3').play()
+		time.sleep(0.5)
 
 		# Record the current datetime and send it to the user
-		client_socket.send(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S').encode())
+		current = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %w %H:%M:%S')
+		client_socket.send(current.encode())
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received date' | b'invalid date'
 
 		# Take a picture and send it to the user
