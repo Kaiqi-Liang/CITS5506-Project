@@ -19,7 +19,7 @@ hostname -I
 Install dependencies and run the doorbell code.
 
 ```bash
-pip install vlc
+pip install python-vlc
 python doorbell.py
 ```
 

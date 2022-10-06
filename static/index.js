@@ -47,15 +47,11 @@ lock.addEventListener('click', unlock);
 setInterval(() => {
 	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
 		if (text === 'True') {
-			// Play a doorbell ringing sound and send a notification to the browser
-			new Audio('static/doorbell.mp3').play();
-			new Notification("Someone's at the door").onclick = () => {
-				// Refresh the audio
+			const refresh = () => {
 				const audio = document.querySelector('audio');
 				audio.src = 'static/out.wav';
 				audio.src = 'static/in.wav';
 
-				// Reload the images
 				document.querySelectorAll('img').forEach((img) => {
 					const src = img.src;
 					img.src = 'static/spinner.svg';
@@ -64,6 +60,14 @@ setInterval(() => {
 					}, 1000);
 				});
 			};
+
+			// Play a doorbell ringing sound and send a notification to the browser
+			new Audio('static/doorbell.mp3').play();
+			new Notification("Someone's at the door").onclick = refresh;
+
+			// Refresh the audio and images then play the new audio after 2 seconds
+			refresh();
+			setTimeout(() => new Audio('static/in.wav').play(), 2000);
 		}
 	});
 }, 5000);

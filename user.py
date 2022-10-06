@@ -3,6 +3,7 @@ import os
 import socket
 import datetime
 import threading
+import signal
 import flask
 import yaml
 import plot
@@ -69,6 +70,15 @@ def audio():
 		client_socket.close()
 		return ERROR_MESSAGE, 500
 
+@APP.after_request
+def add_header(response):
+	'''
+	Add headers to disable browser caching
+	'''
+	response.headers['Pragma'] = 'no-cache'
+	response.headers['Cache-Control'] = 'no-cache, no-store'
+	return response
+
 def server():
 	'''
 	Server code to receive data from the doorbell
@@ -84,13 +94,16 @@ def server():
 				date = conn.recv(DATE_LEN)
 				try:
 					# Add a datetime object to the database
-					DATETIMES.append(datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S') )
+					date = datetime.datetime.strptime(date.decode(), '%Y-%m-%d %w %H:%M:%S')
+					print(date)
+					DATETIMES.append(date)
 					with open('datetimes.yml', 'w') as file:
 						yaml.dump(DATETIMES, file)
 					plot.plot(DATETIMES)
 					conn.send(b'received date')
 				except:
 					conn.send(b'invalid date')
+
 				# Receive the image and audio data and write to files
 				data_to_file(conn, 'static/in.jpeg', END_IMAGE, b'received image')
 				data_to_file(conn, 'static/in.wav', END_AUDIO, b'received audio')
@@ -101,7 +114,7 @@ def server():
 				conn.close()
 				print('Lost connection with the doorbell')
 				break
- 
+
 if __name__ == '__main__':
 	# Read in the database which stores all the datetimes when the doorbell was pressed
 	if not os.path.isfile('datetimes.yml'):
@@ -117,10 +130,17 @@ if __name__ == '__main__':
 		# Only allow 1 connection at a time
 		server_socket.listen(1)
 		threading.Thread(target=server).start()
-	except:
-		print('Failed to start the server')
+	except Exception as error:
+		print(f'Failed to start the server: {error}')
 		server_socket.close()
 		exit(1)
 
 	# Run the Flask server on a different thread
 	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
+
+	# Close the socket when Control-C is pressed to end the program
+	def handler(signum, frame):
+		server_socket.close()
+		exit(1)
+
+	signal.signal(signal.SIGINT, handler)
