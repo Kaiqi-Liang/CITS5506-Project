@@ -42,12 +42,6 @@ python doorbell.py device_ip_address
 
 ### User Interface (Run on any device)
 
-Find the private IP address of the device. This is how to do it on a Unix operating system.
-
-```bash
-ifconfig | egrep 'inet .* broadcast' | cut -d' ' -f2
-```
-
 List all the virtual environments on your system.
 
 ```bash
@@ -58,24 +52,26 @@ If you see the error messsage `command not found` go install [Miniconda](https:/
 
 Otherwise check the list of virtual environments on your system and make sure the name `iot` does not exist.
 
-Then create a new virtual environment called `iot` with all the dependencies installed and activate it.
+Then create a new virtual environment called `iot` with all the dependencies installed.
 
 ```bash
 conda env create --file iot.yml
+```
+
+If it already exists just replace `iot` with another name that is not taken.
+
+The above commands only need to be run once. The following commands need to be run every time.
+
+Find the private IP address of the device. This is how to do it on a Unix operating system.
+
+```bash
+ifconfig | egrep 'inet .* broadcast' | cut -d' ' -f2
+```
+
+Activate the virtual environment and run the user code providing the IP address of the Raspberry Pi as the first commandline argument.
+
+```bash
 conda activate iot
-```
-
-If it already exists just use another name that is not taken.
-
-```bash
-mv iot.yml name_not_taken.yml
-conda env create --file name_not_taken.yml
-conda activate name_not_taken
-```
-
-Run the user code providing the IP address of the Raspberry Pi as the first commandline argument.
-
-```bash
 python user.py raspberry_pi_ip_address
 ```
 
