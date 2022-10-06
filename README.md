@@ -22,25 +22,30 @@ Connect Raspberry Pi to a camera through the camera serial interface, a speaker 
 
 ![circuit](circuit.png)
 
-Update the `USER_ADDR_INFO` constant in [helper.py](helper.py) with the private IP address of the computer that will be used to run the user code. Find the private IP address of the Raspberry Pi.
+Find the private IP address of the Raspberry Pi.
 
 ```bash
 hostname -I
 ```
 
-Install dependencies and run the doorbell code.
+Install `python-vlc`.
 
 ```bash
 pip install python-vlc
-python doorbell.py
+```
+
+Run the doorbell code providing the IP address of the device as the first commandline argument.
+
+```bash
+python doorbell.py device_ip_address
 ```
 
 ### User Interface (Run on any device)
 
-Update the `DOORBELL_ADDR_INFO` constant in [helper.py](helper.py) with the private IP address of the Raspberry Pi. Find the private IP address of the computer.
+Find the private IP address of the device. This is how to do it on a Unix operating system.
 
 ```bash
-ifconfig | egrep 'inet .* broadcast'
+ifconfig | egrep 'inet .* broadcast' | cut -d' ' -f2
 ```
 
 List all the virtual environments on your system.
@@ -68,10 +73,10 @@ conda env create --file name_not_taken.yml
 conda activate name_not_taken
 ```
 
-Run the user code.
+Run the user code providing the IP address of the Raspberry Pi as the first commandline argument.
 
 ```bash
-python user.py
+python user.py raspberry_pi_ip_address
 ```
 
 Open <http://localhost:5000/> to view the user interface.
