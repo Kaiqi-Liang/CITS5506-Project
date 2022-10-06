@@ -1,11 +1,13 @@
 import socket
 import sys
 
+# Get the ip address from the commandline argument
 try:
 	IP_ADDRESS = sys.argv[1]
 except:
 	print('Usage: python user.py | doorbell.py ip_address')
 	exit(1)
+
 USER_ADDR_INFO = (IP_ADDRESS, 9000)
 DOORBELL_ADDR_INFO = (IP_ADDRESS, 8000)
 START_AUDIO = b'start sending audio'
