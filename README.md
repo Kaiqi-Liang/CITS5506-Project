@@ -2,13 +2,25 @@
 
 ## Requirements
 
-* A Raspberry Pi.
 * A device that is capable of running `Miniconda` and `Flask` with a browser that supports [Notifications API](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API#browser_compatibility).
-* They must be connected to the same private network.
+* A Raspberry Pi.
+* The device and the Raspberry Pi must be connected to the same private network.
+* A breadboard
+* A servo motor
+* A USB Microphone
+* A speaker
+* A pushbutton
+* A Raspberry Pi camera
+* Two female-to-male jumper wires
+* Three male-to-male jumper wires
 
 ## Setup
 
 ### Smart Doorbell (Run on Raspberry Pi)
+
+Connect Raspberry Pi to a camera through the camera serial interface, a speaker either via Bluetooth or an AUX cord. Then wire up the rest of the components on the Raspberry Pi breadboard as follows.
+
+![circuit](circuit.png)
 
 Update the `USER_ADDR_INFO` constant in [helper.py](helper.py) with the private IP address of the computer that will be used to run the user code. Find the private IP address of the Raspberry Pi.
 
