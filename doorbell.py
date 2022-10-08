@@ -11,6 +11,7 @@ import datetime
 
 LOCKED = 2
 UNLOCKED = 12
+PIN_BUTTON = 4
 PIN_MOTOR = 11
 
 def server():
@@ -60,7 +61,7 @@ if __name__ == '__main__':
 	GPIO.setup(PIN_MOTOR, GPIO.OUT)
 	servo = GPIO.PWM(PIN_MOTOR, 50)
 	camera = picamera.PiCamera()
-	btn = gpiozero.Button(4)
+	btn = gpiozero.Button(PIN_BUTTON)
 
 	# Get the motor ready to turn
 	servo.start(0)
