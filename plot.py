@@ -1,39 +1,56 @@
 import pandas as pd
+import seaborn as sns
 import datetime
 import matplotlib
-import seaborn
 
 matplotlib.use('AGG')
+sns.set_style('darkgrid')
 
 def plot(datetimes: list[datetime.datetime]):
-    df = pd.DataFrame(datetimes, columns=['date'])
-    dfdate_only = df['date'].dt.date
+	df = pd.DataFrame(datetimes, columns=['datetime'])
 
-    l7d = []
-    start = 0
-    for i in range(7):
-        l7d.append(datetime.datetime.now() - datetime.timedelta(days=start))
-        start = start + 1
-    dfl7d = pd.DataFrame(l7d, columns=['date'])
-    l7d_date = dfl7d['date'].dt.date
+	# Split datetime into 2 columns of date and time
+	df['date'] = df['datetime'].dt.date
+	df['time'] = df['datetime'].dt.time
 
-    l7d_list = l7d_date.values.tolist()
-    dateonly_list = dfdate_only.values.tolist()
-    l3 = [x for x in dateonly_list if x in l7d_list]
-    final_list = l3 + l7d_list
+	# Count the number of times each hour appears
+	hours = pd.DataFrame(
+		[int(d.strftime('%H')) for d in df['time']] + list(range(24)),
+		columns=['hour']
+	).groupby(['hour']).agg(
+		count=pd.NamedAgg(column='hour', aggfunc='count')
+	)
+	hours['count'] -= 1
 
-    final_df = pd.DataFrame(final_list, columns=['date'])
-    final_df['date'] = final_df['date'].astype('datetime64')
+	# Get the dates for the past week
+	last_7_days = pd.DataFrame(
+		[datetime.datetime.now() - datetime.timedelta(days=i)
+			for i in range(7)
+		],
+		columns=['date']
+	)['date'].dt.date.values.tolist()
 
-    final_df_grouped = final_df.groupby(['date']).agg(
-        count=pd.NamedAgg(column='date', aggfunc='count')
-    )
-    final_df_grouped['count'] = final_df_grouped['count'] - 1
+	# Count the number of times each day appears
+	days = pd.DataFrame(
+		[date for date in df['date'] if date in last_7_days] + last_7_days,
+		columns=['date']
+	).groupby(['date']).agg(
+		count=pd.NamedAgg(column='date', aggfunc='count')
+	)
+	days['count'] -= 1
+	days = days.reset_index()
 
-    final_df_grouped = final_df_grouped.reset_index()
-    final_df_grouped['date'] = final_df_grouped['date'].dt.day_name()
-    final_df_grouped['count'] = final_df_grouped['count'].astype('int')
+	# Sort by days and display the short name
+	days['day'] = pd.Categorical(
+		days['date'].astype('datetime64').dt.day_name(),
+		categories=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+		ordered=True
+	)
+	days = days.sort_values('day')
+	days['day'] = [day[:3] for day in days['day']]
 
-    seaborn.set_style('darkgrid')
-    seaborn.barplot(final_df_grouped['date'], final_df_grouped['count'])
-    matplotlib.pyplot.savefig('static/plot.jpeg')
+	sns.barplot(x = hours.index, y = hours['count'])
+	matplotlib.pyplot.savefig('static/hours.jpeg')
+
+	sns.barplot(x = days['day'], y = days['count'])
+	matplotlib.pyplot.savefig('static/days.jpeg')

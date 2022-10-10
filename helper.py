@@ -1,7 +1,15 @@
 import socket
+import sys
 
-USER_ADDR_INFO = ('100.90.40.209', 9000)
-DOORBELL_ADDR_INFO = ('100.90.47.138', 8000)
+# Get the ip address from the commandline argument
+try:
+	IP_ADDRESS = sys.argv[1]
+except:
+	print('Usage: python user.py | doorbell.py ip_address')
+	exit(1)
+
+USER_ADDR_INFO = (IP_ADDRESS, 9000)
+DOORBELL_ADDR_INFO = (IP_ADDRESS, 8000)
 START_AUDIO = b'start sending audio'
 END_AUDIO = b'finish sending audio'
 END_IMAGE = b'finish sending image'

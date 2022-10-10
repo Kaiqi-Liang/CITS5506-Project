@@ -17,10 +17,20 @@ html, body {
 	scrollbar-width: 5px;
 }
 
+header > img {
+	max-width: 50%;
+	min-width: 15em;
+}
+
 section {
 	max-width: 50%;
 	margin: auto;
 	min-width: 15em;
+}
+
+audio {
+	width: 100%;
+	height: 3em;
 }
 
 .title {
@@ -78,6 +88,67 @@ button:hover:not([disabled]) {
 	margin-top: 30px;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+::-webkit-scrollbar-track {
+	background-color: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: var(--orange);
+	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+@media only screen and (min-width: 500px) and (max-width: 900px) {
+	section {
+		max-width: 70%;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	section {
+		max-width: 90%;
+	}
+}
+
+/* Animations */
+#circle {
+	height: 35px;
+	width: 35px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.record {
+	background: var(--lightRed);
+	background-image: url("mic.svg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 80%;
+}
+
+.recording {
+	background-image: url("square.svg");
+	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+	}
+	99% {
+		box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+	}
+	100% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+	}
+}
+
+/* Locked */
 .lock {
 	width: 30px;
 	height: 25px;
@@ -152,77 +223,4 @@ button:hover:not([disabled]) {
 
 .lock[disabled] {
 	cursor: auto;
-}
-
-/* Audio */
-audio {
-	width: 100%;
-	height: 3em;
-}
-
-/* Header */
-header > img {
-	max-width: 50%;
-	min-width: 15em;
-}
-
-/* Medium screens */
-@media only screen and (min-width: 500px) and (max-width: 900px) {
-	section {
-		max-width: 70%;
-	}
-}
-
-/* Small screens */
-@media only screen and (max-width: 500px) {
-	section {
-		max-width: 90%;
-	}
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-	width: 5px;
-}
-
-::-webkit-scrollbar-track {
-	background-color: rgba(0, 0, 0, 0);
-}
-
-::-webkit-scrollbar-thumb {
-	background-color: var(--orange);
-	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
-}
-
-#circle {
-	height: 35px;
-	width: 35px;
-	border-radius: 50%;
-	cursor: pointer;
-}
-
-.record {
-	background: var(--lightRed);
-	background-image: url("mic.svg");
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 80%;
-}
-
-.recording {
-	background-image: url("square.svg");
-	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-	animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-	0% {
-		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-	}
-	99% {
-		box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
-	}
-	100% {
-		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-	}
 }

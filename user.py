@@ -118,8 +118,7 @@ def server():
 if __name__ == '__main__':
 	# Read in the database which stores all the datetimes when the doorbell was pressed
 	if not os.path.isfile('datetimes.yml'):
-		with open('datetimes.yml', 'w'):
-			pass
+		open('datetimes.yml', 'w')
 	with open('datetimes.yml', 'r') as file:
 		DATETIMES = yaml.full_load(file)
 

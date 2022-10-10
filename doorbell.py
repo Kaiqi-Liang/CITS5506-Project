@@ -11,6 +11,8 @@ import datetime
 
 LOCKED = 2
 UNLOCKED = 12
+PIN_BUTTON = 4
+PIN_LED = 18
 PIN_MOTOR = 11
 
 def server():
@@ -60,7 +62,8 @@ if __name__ == '__main__':
 	GPIO.setup(PIN_MOTOR, GPIO.OUT)
 	servo = GPIO.PWM(PIN_MOTOR, 50)
 	camera = picamera.PiCamera()
-	btn = gpiozero.Button(4)
+	button = gpiozero.Button(PIN_BUTTON)
+	led = gpiozero.LED(PIN_LED)
 
 	# Get the motor ready to turn
 	servo.start(0)
@@ -84,10 +87,10 @@ if __name__ == '__main__':
 		exit(1)
 
 	while True:
-		# Waiting for the doorbell to be pressed
 		btn.wait_for_press()
 
-		# Play a doorbell ringing sound
+		# Turn on the LED and play the doorbell ringing sound
+		led.on()
 		vlc.MediaPlayer('static/doorbell.mp3').play()
 		time.sleep(0.5)
 
@@ -109,3 +112,6 @@ if __name__ == '__main__':
 				client_socket.send(chunk)
 		client_socket.send(END_AUDIO)
 		print(client_socket.recv(RECEIVED_MSG_LEN)) # b'received audio'
+
+		# Turn off the LED after the user has received both the image and the audio
+		led.off()
