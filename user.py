@@ -1,4 +1,4 @@
-from helper import DOORBELL_ADDR_INFO, START_AUDIO, END_AUDIO, END_IMAGE, UNLOCK_SIGNAL, USER_ADDR_INFO, RECEIVED_MSG_LEN, DATE_LEN, data_to_file
+from helper import DOORBELL_ADDR_INFO, USER_ADDR_INFO, START_AUDIO, END_AUDIO, END_IMAGE, UNLOCK_SIGNAL, RECEIVED_MSG_LEN, DATE_LEN, data_to_file
 import os
 import socket
 import datetime
@@ -86,7 +86,6 @@ def server():
 	an image taken at the door and
 	an audio recording
 	'''
-	print('Server is running')
 	while True:
 		conn, _ = server_socket.accept()
 		while True:
@@ -126,9 +125,10 @@ if __name__ == '__main__':
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		server_socket.bind(('', USER_ADDR_INFO[1]))
-		# Only allow 1 connection at a time
+		# Only allows 1 connection at a time
 		server_socket.listen(1)
 		threading.Thread(target=server).start()
+		print(f'Server is listening on port {USER_ADDR_INFO[1]}')
 	except Exception as error:
 		print(f'Failed to start the server: {error}')
 		server_socket.close()
