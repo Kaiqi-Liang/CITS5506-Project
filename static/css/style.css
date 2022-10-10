@@ -9,6 +9,10 @@
 	--lightPurple: #9e77f3;
 }
 
+*, ::before, ::after {
+	box-sizing: border-box;
+}
+
 body {
 	margin: 0;
 	text-align: center;
@@ -35,7 +39,6 @@ input {
 }
 
 input[type="text"], input[type="password"] {
-	box-sizing: border-box;
 	background: none;
 	border: 1px solid #353535;
 	padding: 8px;

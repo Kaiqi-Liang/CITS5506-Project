@@ -12,6 +12,7 @@ const account = document.getElementById('account');
 const edit = document.forms.edit;
 const cancel = document.forms.edit.cancel;
 
+// Click the logo or the cancel button to view the main dashboard
 const hideEditForm = () => {
 	main.style.display = 'block';
 	form.style.display = 'none';
@@ -180,6 +181,7 @@ const startRecording = () => {
 recordButton.onclick = startRecording;
 recordIcon.onclick = startRecording;
 
+// Click account icon to edit username and password
 account.onclick = () => {
 	main.style.display = 'none';
 	form.style.display = 'block';

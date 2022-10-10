@@ -8,12 +8,14 @@ except:
 	print('Usage: python user.py | doorbell.py ip_address')
 	exit(1)
 
-USER_ADDR_INFO = (IP_ADDRESS, 9000)
 DOORBELL_ADDR_INFO = (IP_ADDRESS, 8000)
+USER_ADDR_INFO = (IP_ADDRESS, 9000)
+UNLOCK_SIGNAL = b'unlock'
 START_AUDIO = b'start sending audio'
 END_AUDIO = b'finish sending audio'
 END_IMAGE = b'finish sending image'
-UNLOCK_SIGNAL = b'unlock'
+RECEIVED_AUDIO = b'received audio'
+RECEIVED_IMAGE = b'received image'
 RECEIVED_MSG_LEN = 15
 DATE_LEN = 100
 

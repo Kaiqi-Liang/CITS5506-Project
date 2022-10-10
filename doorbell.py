@@ -1,4 +1,4 @@
-from helper import DOORBELL_ADDR_INFO, USER_ADDR_INFO, START_AUDIO, END_AUDIO, END_IMAGE, UNLOCK_SIGNAL, RECEIVED_MSG_LEN, data_to_file
+from helper import DOORBELL_ADDR_INFO, USER_ADDR_INFO, UNLOCK_SIGNAL, START_AUDIO, END_AUDIO, END_IMAGE, RECEIVED_AUDIO, RECEIVED_MSG_LEN, data_to_file
 import RPi.GPIO as GPIO
 import gpiozero
 import picamera
@@ -44,7 +44,7 @@ def server():
 					conn.send(b'locked')
 				elif message == START_AUDIO:
 					# Receive the audio recording and play it immediately
-					data_to_file(conn, 'in.wav', END_AUDIO, b'received audio')
+					data_to_file(conn, 'in.wav', END_AUDIO, RECEIVED_AUDIO)
 					vlc.MediaPlayer('in.wav').play()
 				else:
 					conn.close()
