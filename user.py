@@ -106,6 +106,7 @@ def server():
 				# Receive the image and audio data and write to files
 				data_to_file(conn, 'static/in.jpeg', END_IMAGE, b'received image')
 				data_to_file(conn, 'static/in.wav', END_AUDIO, b'received audio')
+
 				# Set the flag so the frontend can receive an update
 				global UPDATE
 				UPDATE = True

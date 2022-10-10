@@ -59,10 +59,11 @@ if __name__ == '__main__':
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(PIN_MOTOR, GPIO.OUT)
-	servo = GPIO.PWM(PIN_MOTOR, 50)
+
 	camera = picamera.PiCamera()
 	button = gpiozero.Button(PIN_BUTTON)
 	led = gpiozero.LED(PIN_LED)
+	servo = GPIO.PWM(PIN_MOTOR, 50)
 
 	# Get the motor ready to turn
 	servo.start(0)
