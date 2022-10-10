@@ -50,7 +50,7 @@ def plot(datetimes: list[datetime.datetime]):
 	days['day'] = [day[:3] for day in days['day']]
 
 	sns.barplot(x = hours.index, y = hours['count'])
-	matplotlib.pyplot.savefig('static/hours.jpeg')
+	matplotlib.pyplot.savefig('static/assets/hours.jpeg')
 
 	sns.barplot(x = days['day'], y = days['count'])
-	matplotlib.pyplot.savefig('static/days.jpeg')
+	matplotlib.pyplot.savefig('static/assets/days.jpeg')

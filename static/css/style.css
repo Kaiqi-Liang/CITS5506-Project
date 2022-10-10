@@ -1,0 +1,18 @@
+:root {
+	--charcoal: #313848;
+	--orange: #f89506;
+	--cyan: #5fadbf;
+	--lightRed: #ff5153;
+	--darkGray: #1C1B24;
+	--lightGray: #BFB7C7;
+	--darkPurple: #6718cf;
+	--lightPurple: #9e77f3;
+}
+
+html, body {
+	text-align: center;
+	background: var(--charcoal);
+	font-family: sans-serif;
+	scrollbar-color: var(--orange);
+	scrollbar-width: 5px;
+}

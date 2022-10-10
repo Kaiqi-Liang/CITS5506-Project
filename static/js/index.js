@@ -6,6 +6,19 @@ const stop = document.getElementById('stop');
 const soundClip = document.getElementById('sound-clip');
 const recordIcon = document.getElementById('circle');
 
+// If user has not yet logged in redirect to login page
+const login = async () => {
+	const data = new FormData();
+	data.append('username', localStorage.getItem('username') || '');
+	data.append('password', localStorage.getItem('password') || '');
+	const res = await fetch(`${SERVER_URL}/login`, {
+		method: 'POST',
+		body: data,
+	});
+	if (!res.ok) location.href = 'login';
+}
+login();
+
 // Alert the error message if backend returns a non 200 status code
 const alertError = async (res) => {
 	if (!res.ok) {
@@ -44,32 +57,32 @@ unlockButton.onclick = unlock;
 lock.addEventListener('click', unlock);
 
 // Poll the backend every 5 seconds to check for updates
-setInterval(() => {
-	fetch(`${SERVER_URL}/poll`).then((res) => res.text()).then((text) => {
-		if (text === 'True') {
-			const refresh = () => {
-				const audio = document.querySelector('audio');
-				audio.src = 'static/out.wav';
-				audio.src = 'static/in.wav';
+setInterval(async () => {
+	const res = await fetch(`${SERVER_URL}/poll`);
+	const text = await res.text();
+	if (text === 'True') {
+		const refresh = () => {
+			const audio = document.querySelector('audio');
+			audio.src = 'static/assets/out.wav';
+			audio.src = 'static/assets/in.wav';
 
-				document.querySelectorAll('img').forEach((img) => {
-					const src = img.src;
-					img.src = 'static/spinner.svg';
-					setTimeout(() => {
-						img.src = src;
-					}, 1000);
-				});
-			};
+			document.querySelectorAll('img').forEach((img) => {
+				const src = img.src;
+				img.src = 'static/assets/spinner.svg';
+				setTimeout(() => {
+					img.src = src;
+				}, 1000);
+			});
+		};
 
-			// Play a doorbell ringing sound and send a notification to the browser
-			new Audio('static/doorbell.mp3').play();
-			new Notification("Someone's at the door").onclick = refresh;
+		// Play a doorbell ringing sound and send a notification to the browser
+		new Audio('static/assets/doorbell.mp3').play();
+		new Notification("Someone's at the door").onclick = refresh;
 
-			// Refresh the audio and images then play the new audio after 2 seconds
-			refresh();
-			setTimeout(() => new Audio('static/in.wav').play(), 2000);
-		}
-	});
+		// Refresh the audio and images then play the new audio after 2 seconds
+		refresh();
+		setTimeout(() => new Audio('static/assets/in.wav').play(), 2000);
+	}
 }, 5000);
 
 // Delete the recorded audio section

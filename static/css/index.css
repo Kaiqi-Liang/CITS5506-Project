@@ -1,25 +1,7 @@
-:root {
-	--charcoal: #313848;
-	--orange: #f89506;
-	--cyan: #5fadbf;
-	--lightRed: #ff5153;
-	--darkGray: #1C1B24;
-	--lightGray: #BFB7C7;
-	--darkPurple: #6718cf;
-	--lightPurple: #9e77f3;
-}
-
-html, body {
-	text-align: center;
-	background: var(--charcoal);
-	font-family: sans-serif;
-	scrollbar-color: var(--orange);
-	scrollbar-width: 5px;
-}
-
 header > img {
 	max-width: 50%;
 	min-width: 15em;
+	margin-bottom: 50px;
 }
 
 section {
@@ -93,13 +75,8 @@ button:hover:not([disabled]) {
 	width: 5px;
 }
 
-::-webkit-scrollbar-track {
-	background-color: rgba(0, 0, 0, 0);
-}
-
 ::-webkit-scrollbar-thumb {
 	background-color: var(--orange);
-	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
 }
 
 @media only screen and (min-width: 500px) and (max-width: 900px) {
@@ -124,14 +101,14 @@ button:hover:not([disabled]) {
 
 .record {
 	background: var(--lightRed);
-	background-image: url("mic.svg");
+	background-image: url("../assets/mic.svg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 80%;
 }
 
 .recording {
-	background-image: url("square.svg");
+	background-image: url("../assets/square.svg");
 	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
 	animation: pulse 2s infinite;
 }

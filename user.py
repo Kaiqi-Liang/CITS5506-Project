@@ -12,10 +12,30 @@ APP = flask.Flask(__name__)
 DATETIMES: list[datetime.datetime] = []
 UPDATE = False
 ERROR_MESSAGE = 'Failed to establish a connection with the doorbell'
+USERNAME = 'username'
+PASSWORD = 'password'
+
+@APP.after_request
+def add_header(response):
+	'''
+	Add headers to disable browser caching
+	'''
+	response.headers['Pragma'] = 'no-cache'
+	response.headers['Cache-Control'] = 'no-cache, no-store'
+	return response
 
 @APP.route('/')
 def index():
 	return flask.render_template('index.html')
+
+@APP.route('/login', methods=['GET', 'POST'])
+def login():
+	if flask.request.method == 'GET':
+		return flask.render_template('login.html')
+
+	if flask.request.form.get('username') != USERNAME or flask.request.form.get('password') != PASSWORD:
+		return 'Invalid username or password', 403
+	return {}
 
 @APP.route('/poll')
 def poll():
@@ -53,13 +73,13 @@ def audio():
 	# Convert audio data to a wav file
 	files = flask.request.files
 	audio = files.get('audio')
-	audio.save('static/out.wav')
+	audio.save('static/assets/out.wav')
 
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		client_socket.connect(DOORBELL_ADDR_INFO)
 		client_socket.send(START_AUDIO)
-		with open('static/out.wav', 'rb') as audio:
+		with open('static/assets/out.wav', 'rb') as audio:
 			for chunk in audio:
 				client_socket.send(chunk)
 		client_socket.send(END_AUDIO)
@@ -69,15 +89,6 @@ def audio():
 		print(ERROR_MESSAGE)
 		client_socket.close()
 		return ERROR_MESSAGE, 500
-
-@APP.after_request
-def add_header(response):
-	'''
-	Add headers to disable browser caching
-	'''
-	response.headers['Pragma'] = 'no-cache'
-	response.headers['Cache-Control'] = 'no-cache, no-store'
-	return response
 
 def server():
 	'''
@@ -104,8 +115,8 @@ def server():
 					conn.send(b'invalid date')
 
 				# Receive the image and audio data and write to files
-				data_to_file(conn, 'static/in.jpeg', END_IMAGE, b'received image')
-				data_to_file(conn, 'static/in.wav', END_AUDIO, b'received audio')
+				data_to_file(conn, 'static/assets/in.jpeg', END_IMAGE, b'received image')
+				data_to_file(conn, 'static/assets/in.wav', END_AUDIO, b'received audio')
 
 				# Set the flag so the frontend can receive an update
 				global UPDATE
@@ -139,8 +150,7 @@ if __name__ == '__main__':
 	threading.Thread(target=lambda: APP.run(use_reloader=False)).start()
 
 	# Close the socket when Control-C is pressed to end the program
-	def handler(signum, frame):
-		server_socket.close()
-		exit(1)
+	def handler(*_):
+		exit(0)
 
 	signal.signal(signal.SIGINT, handler)

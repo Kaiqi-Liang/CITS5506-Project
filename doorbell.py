@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
 		# Turn on the LED and play the doorbell ringing sound
 		led.on()
-		vlc.MediaPlayer('static/doorbell.mp3').play()
+		vlc.MediaPlayer('static/assets/doorbell.mp3').play()
 		time.sleep(0.5)
 
 		# Record the current datetime and send it to the user
