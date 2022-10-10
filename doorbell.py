@@ -21,7 +21,6 @@ def server():
 	including a unlock command and
 	an audio recording
 	'''
-	print('Server is running')
 	while True:
 		conn, _ = server_socket.accept()
 		print('Accepted connection from the user')
@@ -71,23 +70,30 @@ if __name__ == '__main__':
 
 	# Client socket for sending datetime object, image and audio to the user
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	# Server socket for listening to the unlock command and receiving audio recording from the user
-	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		client_socket.connect(USER_ADDR_INFO)
 		print('Connected to the user')
-		server_socket.bind(('', DOORBELL_ADDR_INFO[1]))
-		server_socket.listen(1)
-		server_thread = threading.Thread(name="server", target=server)
-		server_thread.start()
 	except:
 		client_socket.close()
-		server_socket.close()
 		print('Failed to connect to the user')
 		exit(1)
 
+	# Server socket for listening to the unlock command and receiving audio recording from the user
+	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		server_socket.bind(('', DOORBELL_ADDR_INFO[1]))
+		# Only allows 1 connection at a time
+		server_socket.listen(1)
+		threading.Thread(name="server", target=server).start()
+		print(f'Server is listening on port {DOORBELL_ADDR_INFO[1]}')
+	except Exception as error:
+		client_socket.close()
+		server_socket.close()
+		print(f'Failed to start the server: {error}')
+		exit(1)
+
 	while True:
-		btn.wait_for_press()
+		button.wait_for_press()
 
 		# Turn on the LED and play the doorbell ringing sound
 		led.on()
