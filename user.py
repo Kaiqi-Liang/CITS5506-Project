@@ -37,6 +37,18 @@ def login():
 		return 'Invalid username or password', 403
 	return {}
 
+@APP.route('/edit')
+def edit():
+	username = flask.request.args.get('username')
+	password = flask.request.args.get('password')
+	global USERNAME
+	global PASSWORD
+	if USERNAME == username and PASSWORD == password:
+		return 'Same username and password', 400
+	USERNAME = username
+	PASSWORD = password
+	return {}
+
 @APP.route('/poll')
 def poll():
 	'''

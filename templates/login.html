@@ -7,18 +7,17 @@
 	<title>Login</title>
 	<script defer src="{{url_for('static', filename='js/login.js')}}"></script>
 	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-	<link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
 </head>
 <body>
 	<header>
-		<img src="{{url_for('static', filename='assets/doorbell.png')}}" alt="logo">
+		<img id="logo" src="{{url_for('static', filename='assets/doorbell.png')}}" alt="logo">
 	</header>
-	<main>
+	<main id="form">
 		<form name="login" id="login">
 			<label for="username">Username</label>
 			<input type="text", id="username">
 			<label for="password">Password</label>
-			<input type="text" id="password">
+			<input type="password" id="password">
 			<input type="submit" value="Login", name="login">
 		</form>
 	</main>

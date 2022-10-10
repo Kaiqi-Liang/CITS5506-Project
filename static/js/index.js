@@ -5,6 +5,19 @@ const recordButton = document.getElementById('record');
 const stop = document.getElementById('stop');
 const soundClip = document.getElementById('sound-clip');
 const recordIcon = document.getElementById('circle');
+const main = document.querySelector('main');
+const form = document.getElementById('form');
+const logo = document.getElementById('logo');
+const account = document.getElementById('account');
+const edit = document.forms.edit;
+const cancel = document.forms.edit.cancel;
+
+const hideEditForm = () => {
+	main.style.display = 'block';
+	form.style.display = 'none';
+};
+logo.onclick = hideEditForm;
+cancel.onclick = hideEditForm;
 
 // If user has not yet logged in redirect to login page
 const login = async () => {
@@ -166,3 +179,20 @@ const startRecording = () => {
 // Record button
 recordButton.onclick = startRecording;
 recordIcon.onclick = startRecording;
+
+account.onclick = () => {
+	main.style.display = 'none';
+	form.style.display = 'block';
+	edit.onsubmit = async (event) => {
+		const username = edit.username.value;
+		const password = edit.password.value;
+		event.preventDefault();
+		if (username && password) {
+			const res = await fetch(`${SERVER_URL}/edit?username=${username}&password=${password}`);
+			alertError(res);
+			if (res.ok) location.reload();
+		} else {
+			alert('Please enter username and password');
+		}
+	}
+};

@@ -1,7 +1,12 @@
-header > img {
-	max-width: 50%;
-	min-width: 15em;
-	margin-bottom: 50px;
+#account {
+	position: fixed;
+	right: 15px;
+	top: 8px;
+	cursor: pointer;
+}
+
+#account:hover {
+	width: 50px;
 }
 
 section {
@@ -30,6 +35,7 @@ audio {
 }
 
 .image {
+	max-width: 100%;
 	object-fit: cover;
 	border-radius: 20px;
 	margin-bottom: 20px;
@@ -68,15 +74,6 @@ button:hover:not([disabled]) {
 
 #circle {
 	margin-top: 30px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-	width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-	background-color: var(--orange);
 }
 
 @media only screen and (min-width: 500px) and (max-width: 900px) {
@@ -200,4 +197,17 @@ button:hover:not([disabled]) {
 
 .lock[disabled] {
 	cursor: auto;
+}
+
+#form {
+	display: none;
+}
+
+#edit {
+	margin: auto;
+	font-size: 1.25rem;
+}
+
+input[type="submit"], input[type="button"] {
+	width: 45%;
 }

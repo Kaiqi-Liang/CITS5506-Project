@@ -9,10 +9,71 @@
 	--lightPurple: #9e77f3;
 }
 
-html, body {
+body {
+	margin: 0;
 	text-align: center;
 	background: var(--charcoal);
 	font-family: sans-serif;
-	scrollbar-color: var(--orange);
-	scrollbar-width: 5px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 15px;
+}
+
+label {
+	margin: 15px 0 5px;
+	font-size: 0.875rem;
+}
+
+input {
+	border: none;
+	width: 100%;
+	border-radius: 4px;
+}
+
+input[type="text"], input[type="password"] {
+	box-sizing: border-box;
+	background: none;
+	border: 1px solid #353535;
+	padding: 8px;
+}
+
+#buttons {
+	margin-top: 15px;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+input[type="submit"], input[type="button"] {
+	background: var(--orange);
+	padding: 7px;
+	cursor: pointer;
+	font-size: 0.8125rem;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+	background: #eb5f07;
+}
+
+label, input[type="text"], input[type="password"], input[type="submit"]:hover, input[type="button"]:hover, #edit {
+	color: #eee;
+}
+
+#logo {
+	margin-top: 10px;
+	margin-bottom: 30px;
+	cursor: pointer;
+}
+
+#form {
+	background: black;
+	max-width: 500px;
+	min-width: 300px;
+	width: 30vw;
+	margin: auto;
+	border-radius: 4px;
 }
