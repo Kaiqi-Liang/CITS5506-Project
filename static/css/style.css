@@ -41,14 +41,8 @@ input[type="text"], input[type="password"] {
 	padding: 8px;
 }
 
-#buttons {
-	margin-top: 15px;
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-}
-
 input[type="submit"], input[type="button"] {
+	margin-top: 15px;
 	background: var(--orange);
 	padding: 7px;
 	cursor: pointer;

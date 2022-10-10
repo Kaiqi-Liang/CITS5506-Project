@@ -208,6 +208,12 @@ button:hover:not([disabled]) {
 	font-size: 1.25rem;
 }
 
+#buttons {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
 input[type="submit"], input[type="button"] {
 	width: 45%;
 }
