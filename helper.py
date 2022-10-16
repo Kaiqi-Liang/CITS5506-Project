@@ -1,12 +1,13 @@
 import socket
 import sys
 
+IP_ADDRESS = '127.0.0.1'
 # Get the ip address from the commandline argument
 try:
 	IP_ADDRESS = sys.argv[1]
 except:
 	print('Usage: python user.py | doorbell.py ip_address')
-	exit(1)
+	print('Did not provide an IP address, using localhost as default')
 
 DOORBELL_ADDR_INFO = (IP_ADDRESS, 8000)
 USER_ADDR_INFO = (IP_ADDRESS, 9000)

@@ -75,4 +75,6 @@ conda activate iot
 python user.py raspberry_pi_ip_address
 ```
 
-Open <http://localhost:5000/> to view the user interface.
+If no IP address is provided via the commandline, localhost (`127.0.0.1`) will be used as the default.
+
+Open <http://127.0.0.1:5000/> to view the user interface. The first time running it will require a login with the default username 'username' and password 'password' which can be changed through the profile icon on the top right corner once logged in. Then the login details will be stored in the browser `LocalStorage` which will be used to authenticate for future access until they are changed.

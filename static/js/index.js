@@ -192,7 +192,11 @@ account.onclick = () => {
 		if (username && password) {
 			const res = await fetch(`${SERVER_URL}/edit?username=${username}&password=${password}`);
 			alertError(res);
-			if (res.ok) location.reload();
+			if (res.ok) {
+				location.reload();
+				localStorage.removeItem('username');
+				localStorage.removeItem('password');
+			}
 		} else {
 			alert('Please enter username and password');
 		}
