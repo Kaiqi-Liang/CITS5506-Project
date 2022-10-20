@@ -8,6 +8,13 @@ ERROR_MESSAGE = 'Failed to establish a connection with the doorbell'
 USERNAME = 'username'
 PASSWORD = 'password'
 
+def update():
+	'''
+	Update the flag used for polling
+	'''
+	global UPDATE
+	UPDATE = not UPDATE
+
 @APP.after_request
 def add_header(response):
 	'''
@@ -56,10 +63,9 @@ def poll():
 	'''
 	Allow frontend to poll for updates
 	'''
-	global UPDATE
 	if UPDATE:
 		# Reset the flag after the frontend has received the update
-		UPDATE = False
+		update()
 		return str(True)
 	return str(UPDATE)
 

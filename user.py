@@ -1,5 +1,5 @@
 from helper import USER_ADDR_INFO, END_AUDIO, END_IMAGE, RECEIVED_AUDIO, RECEIVED_IMAGE, DATE_LEN, data_to_file
-from routes import APP, UPDATE
+from routes import APP, update
 import os
 import socket
 import datetime
@@ -39,8 +39,7 @@ def server():
 				data_to_file(conn, 'static/assets/in.wav', END_AUDIO, RECEIVED_AUDIO)
 
 				# Set the flag so the frontend can receive an update
-				global UPDATE
-				UPDATE = True
+				update()
 			except:
 				conn.close()
 				print('Lost connection with the doorbell')
@@ -71,6 +70,7 @@ if __name__ == '__main__':
 
 	# Close the socket when Control-C is pressed to end the program
 	def handler(*_):
+		server_socket.close()
 		exit(0)
 
 	signal.signal(signal.SIGINT, handler)
